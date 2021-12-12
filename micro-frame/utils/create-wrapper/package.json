@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "name": "@micro-frame/utils-create-wrapper",
+  "packageManager": "yarn@3.0.2",
+  "main": "create-wrapper.client.ts",
+  "browser": "./create-wrapper.client.ts",
+  "dependencies": {
+    "@micro-frame/browser": "1.0.0",
+    "@micro-frame/node": "1.0.0",
+    "@micro-frame/utils-create-element": "1.0.0"
+  },
+  "devDependencies": {
+    "@xxxs-shop/dev-configs": "1.0.0"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "name": "@micro-frame/plugin-fetch",
+  "packageManager": "yarn@3.0.2",
+  "main": "fetch.node.ts",
+  "browser": "fetch.client.ts",
+  "dependencies": {
+    "@micro-frame/core": "1.0.0",
+    "@micro-frame/utils-create-element": "1.0.0"
+  },
+  "devDependencies": {
+    "@micro-frame/browser": "1.0.0",
+    "@micro-frame/node": "1.0.0",
+    "@types/node": "^16.11.4",
+    "@xxxs-shop/dev-configs": "1.0.0"
+  }
+}

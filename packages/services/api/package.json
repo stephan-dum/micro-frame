@@ -1,0 +1,14 @@
+{
+  "name": "@xxxs-shop/services-api",
+  "version": "1.0.0",
+  "packageManager": "yarn@3.1.0",
+  "devDependencies": {
+    "@xxxs-shop/services-config": "1.0.0"
+  },
+  "requires": [
+    "@xxxs-shop/services-config"
+  ],
+  "exports": {
+    "default": "index.ts"
+  }
+}

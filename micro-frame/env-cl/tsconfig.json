@@ -1,0 +1,3 @@
+{
+  "extends": "@micro-frame/webpack/tsconfig.node.json"
+}

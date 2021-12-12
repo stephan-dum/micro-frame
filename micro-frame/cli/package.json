@@ -1,0 +1,34 @@
+{
+  "name": "@micro-frame/cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@micro-frame/core": "1.0.0",
+    "@micro-frame/env-cl": "1.0.0",
+    "@micro-frame/webpack": "1.0.0",
+    "commander": "^8.2.0",
+    "cross-env": "^7.0.3",
+    "cross-spawn": "^7.0.3",
+    "fast-glob": "^3.2.7",
+    "fs-extra": "^9.1.0",
+    "ts-node": "^10.4.0",
+    "typescript": "4.4.4",
+    "webpack": "^5.64.4"
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "^6.0.2",
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "^16.10.3",
+    "@types/semver": "^7.3.9",
+    "@types/webpack": "^5.28.0",
+    "@xxxs-shop/dev-configs": "1.0.0",
+    "semver": "^7.3.5"
+  }
+}

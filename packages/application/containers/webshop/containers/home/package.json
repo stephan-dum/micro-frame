@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "name": "@xxxs-shop/home",
+  "packageManager": "yarn@3.0.2",
+  "dependencies": {
+    "@micro-frame/plugin-react": "1.0.0",
+    "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "@micro-frame/core": "1.0.0",
+    "@types/react": "^17.0.30",
+    "@xxxs-shop/dev-configs": "1.0.0"
+  }
+}

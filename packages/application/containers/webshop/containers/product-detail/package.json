@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "name": "@xxxs-shop/product",
+  "packageManager": "yarn@3.0.2",
+  "dependencies": {
+    "@xxxs-shop/utils": "1.0.0",
+    "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.30",
+    "@xxxs-shop/dev-configs": "1.0.0"
+  }
+}

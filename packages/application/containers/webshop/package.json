@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "name": "@xxxs-shop/webshop",
+  "workspaces": [
+    "./containers/*"
+  ],
+  "packageManager": "yarn@3.0.2",
+  "dependencies": {
+    "@xxxs-shop/react-hooks-icon": "1.0.0",
+    "@xxxs-shop/search": "1.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@micro-frame/core": "1.0.0",
+    "@micro-frame/env-cl": "1.0.0",
+    "@micro-frame/plugin-react": "1.0.0",
+    "@micro-frame/webpack": "1.0.0",
+    "@types/react": "^17.0.30",
+    "@types/webpack": "^5.28.0",
+    "@types/webpack-env": "^1.16.3",
+    "@xxxs-shop/dev-configs": "1.0.0",
+    "@xxxs-shop/services-logger": "1.0.0",
+    "@xxxs-shop/services-svg": "1.0.0",
+    "@xxxs-shop/services-translations": "1.0.0",
+    "typescript": "4.4.4",
+    "webpack-stats-plugin": "^1.0.3"
+  }
+}

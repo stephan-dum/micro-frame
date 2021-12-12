@@ -1,0 +1,3 @@
+{
+  "extends": "@xxxs-shop/dev-configs/react-tsconfig.json",
+}

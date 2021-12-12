@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "name": "@micro-frame/utils-create-element",
+  "main": "createElement.server.ts",
+  "browser": "createElement.client.ts",
+  "packageManager": "yarn@3.0.2",
+  "devDependencies": {
+    "@micro-frame/browser": "1.0.0",
+    "@micro-frame/core": "1.0.0",
+    "@xxxs-shop/dev-configs": "1.0.0"
+  }
+}

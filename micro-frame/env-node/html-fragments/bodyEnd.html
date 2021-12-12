@@ -1,0 +1,52 @@
+<style>
+  /*.animate-height > .animate-height__inner {
+    height: 0;
+    transition: height 5s;
+  }
+  .animate-height:hover > .animate-height__inner {
+    height: max-content;
+  }
+  .animate-height__inner {
+    background: blue;
+  }*/
+  /*.animate-height > .animate-height__inner {
+    background-color: #eee;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.26s ease;
+  }
+  .animate-height > .animate-height__opener:hover ~ .animate-height__inner {
+    transform: scaleY(1);
+  }*/
+  .animate-height__opener:hover ~ .animate-height__inner,
+  .animate-height__opener:active ~ .animate-height__inner,
+  .animate-height__inner:hover {
+    clip: rect(auto, auto, 10rem, auto);
+  }
+  .animate-height__inner {
+    clip: rect(auto, auto, 0, auto);
+    position: absolute;
+    margin: -1rem 0;
+    padding: .5rem;
+
+    color: white;
+
+    background-color: rgba(0, 0, 0, 0.8);
+
+    transition-property: clip;
+    transition-duration: 0.5s;
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+</style>
+
+<div class="animate-height">
+  <div class="animate-height__opener">open me</div>
+  <div class="animate-height__inner">
+    <ul>
+      <li>animate me</li>
+      <li>and me</li>
+      <li>also me</li>
+    </ul>
+  </div>
+</div>

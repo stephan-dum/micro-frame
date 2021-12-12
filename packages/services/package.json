@@ -1,0 +1,12 @@
+{
+  "name": "@xxxs-shop/services",
+  "packageManager": "yarn@3.1.0",
+  "version": "1.0.0",
+  "workspaces": [
+    "./*"
+  ],
+  "devDependencies": {
+    "@micro-frame/core": "1.0.0",
+    "@xxxs-shop/dev-configs": "1.0.0"
+  }
+}

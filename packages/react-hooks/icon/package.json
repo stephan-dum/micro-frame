@@ -1,0 +1,12 @@
+{
+  "name": "@xxxs-shop/react-hooks-icon",
+  "version": "1.0.0",
+  "packageManager": "yarn@3.1.0",
+  "main": "useIcon.ts",
+  "dependencies": {
+    "@micro-frame/plugin-react": "1.0.0"
+  },
+  "devDependencies": {
+    "@xxxs-shop/services-svg": "1.0.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@xxxs-shop/react-hooks-logger",
+  "version": "1.0.0",
+  "packageManager": "yarn@3.1.0",
+  "dependencies": {
+    "@micro-frame/plugin-react": "1.0.0"
+  },
+  "devDependencies": {
+    "@xxxs-shop/services-logger": "1.0.0"
+  }
+}

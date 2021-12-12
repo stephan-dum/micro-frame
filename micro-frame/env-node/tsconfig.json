@@ -1,0 +1,6 @@
+{
+  "extends": "@xxxs-shop/dev-configs/tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}

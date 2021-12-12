@@ -1,0 +1,32 @@
+{
+  "name": "@micro-frame/node",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@micro-frame/browser": "1.0.0",
+    "@micro-frame/core": "1.0.0",
+    "@xxxs-shop/utils": "1.0.0",
+    "commander": "^8.2.0",
+    "express": "^4.17.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@micro-frame/utils-create-element": "1.0.0",
+    "@micro-frame/webpack": "1.0.0",
+    "@types/cross-spawn": "^6.0.2",
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.1",
+    "@types/react": "^17.0.30",
+    "@types/react-dom": "^17.0.9",
+    "@xxxs-shop/dev-configs": "1.0.0",
+    "cross-spawn": "^7.0.3",
+    "webpack-node-externals": "^3.0.0"
+  }
+}

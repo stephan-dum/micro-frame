@@ -1,0 +1,40 @@
+AddType application/json .json
+
+AddOutputFilterByType DEFLATE text/html text/xml text/css text/plain
+AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript application/json
+
+Header set Cache-Control "max-age=864000, public, must-revalidate"
+Header set Connection keep-alive
+
+Header unset Pragma
+FileETag None
+
+<FilesMatch "\.(htm|html|css|js)$">
+	AddDefaultCharset UTF-8
+</FilesMatch>
+<FilesMatch "\.(htm|html)$">
+    BrowserMatch MSIE ie
+    Header set X-UA-Compatible "IE=Edge,chrome=1" env=ie
+</FilesMatch>
+<FilesMatch "\.(js|css|xml|gz)$">
+	Header append Vary: Accept-Encoding
+</FilesMatch>
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_METHOD} ^TRAC[EK]
+RewriteRule .* - [F]
+
+RewriteCond %{HTTPS} off
+RewriteRule (.*)  https://%{HTTP_HOST}/$1 [R=301,L]
+
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule (.*)/?$ http://localhost:61005/$1 [P]
+
+RewriteRule (/ProductDetail)/?$ http://localhost:8112/$1 [P]
+RewriteRule (/checkout)/?$ http://localhost:8111/$1 [P]
+RewriteRule (.*)/?$ http://localhost:8110/$1 [P]

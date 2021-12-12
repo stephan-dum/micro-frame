@@ -1,0 +1,27 @@
+{
+  "name": "@xxxs-shop/search",
+  "version": "1.0.0",
+  "packageManager": "yarn@3.0.2",
+  "statsFile": ".dist/private/stats.json",
+  "entry": {
+    "node": "",
+    "browser": ""
+  },
+  "externals": [
+    "react"
+  ],
+  "devDependencies": {
+    "@micro-frame/env-cl": "1.0.0",
+    "@micro-frame/webpack": "1.0.0",
+    "@types/react": "^17.0.30",
+    "@xxxs-shop/dev-configs": "1.0.0",
+    "@xxxs-shop/services-logger": "1.0.0",
+    "@xxxs-shop/services-svg": "1.0.0",
+    "@xxxs-shop/services-translations": "1.0.0",
+    "webpack-stats-plugin": "^1.0.3"
+  },
+  "dependencies": {
+    "react": "^16.0.2"
+  },
+  "root": ".dist/public/search_f2bdd935655d3a5b9ebb.js"
+}
