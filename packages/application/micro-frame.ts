@@ -21,7 +21,7 @@ const config: MicroFrameContainerConfig = {
   //   "@xxxs-shop/services-svg",
   //   "@xxxs-shop/services-logger"
   // ],
-  statsFile: ".dist/private/stats.json",
+  statsFile: "./.dist/private/stats.json",
 };
 
 export default config;

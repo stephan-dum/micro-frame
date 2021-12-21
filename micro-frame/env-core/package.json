@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@micro-frame/plugin-chunk": "1.0.0",
     "@micro-frame/plugin-container": "1.0.0",
     "@micro-frame/plugin-fetch": "1.0.0",
     "@micro-frame/plugin-fragment": "1.0.0",

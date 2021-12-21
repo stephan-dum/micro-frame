@@ -1,9 +1,9 @@
 import intersects = require("semver/ranges/intersects");
-import {CLINodeResult, CLINodeUnion, CLIRenderContext, ExternalModule, ExternalRecords} from "../types";
+import {CLINodeResult, CLINodeUnion, CLIRenderContext, RawExternalModule, ExternalRecords} from "../types";
 import mergeExternals from "../utils/mergeExternals";
 
 interface GetSplitNodeOptions {
-  externals?: ExternalModule[];
+  externals?: RawExternalModule[];
   parentExternals?: ExternalRecords;
   chunks: CLINodeResult[];
 }

@@ -8,7 +8,6 @@
     "./packages/dev-configs",
     "./packages/utils",
     "./packages/webpack",
-    "./packages/render-context",
     "./micro-frame/*",
     "./micro-frame/plugins/*",
     "./micro-frame/utils/*"
@@ -16,16 +15,7 @@
   "version": "1.0.0",
   "description": "A show case for pouchdb used in a webshop",
   "scripts": {
-    "dev2": "ts-node --project=micro-frame/cli/tsconfig.json micro-frame/cli/development.ts",
-    "dev": "cross-env TS_NODE_PROJECT=micro-frame/webpack/tsconfig.node.json node --inspect --experimental-modules --es-module-specifier-resolution=node --require ts-node/register micro-frame/cli/development",
-    "dev3": "cross-env TS_NODE_PROJECT=micro-frame/webpack/tsconfig.node.json node --inspect --experimental-modules --require ts-node/register micro-frame/cli/development.ts",
-    "dev5": "cross-env TS_NODE_PROJECT=micro-frame/webpack/tsconfig.node.json node --experimental-modules  --require ts-node/register micro-frame/cli/development.ts",
-    "aggregate": "cross-env TS_NODE_PROJECT=micro-frame/env-node/tsconfig.json BASE=\".\\packages\\containers\\Application\" node --inspect --experimental-modules --require ts-node/register micro-frame/cli/aggregate.ts",
-    "start-server": "cross-env TS_NODE_PROJECT=micro-frame/env-node/tsconfig.json PORT=8110 node --inspect --experimental-modules --require ts-node/register micro-frame/env-node/start-server.ts",
-    "yalc:publish": "cd $INIT_CWD && npx yalc publish --push",
-    "yalc:link": "cd $INIT_CWD && npx yalc add --link",
-    "yalc-unlink": "npx yalc remove --all",
-    "yalc-link": "yarn workspaces foreach run yalc:publish && yarn workspaces foreach run yalc:link"
+    "dev": "cross-env TS_NODE_PROJECT=micro-frame/webpack/tsconfig.node.json node --inspect --experimental-modules --es-module-specifier-resolution=node --conditions=node --conditions=development --require ts-node/register micro-frame/cli/development"
   },
   "keywords": [],
   "author": "Stephan Dum",

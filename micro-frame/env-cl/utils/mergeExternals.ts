@@ -8,8 +8,7 @@ const mergeExternalsOld = (target: ExternalRecords, source: ExternalRecords) => 
 
   return target;
 }
-
-const mergeExternals = (target: ExternalRecords, ...sources: ExternalRecords[]) => {
+const mergeExternals = (target: ExternalRecords, ...sources: ExternalRecords[]): ExternalRecords => {
   sources.forEach((source) => {
     Object.entries(source).forEach(([name, ranges]) => {
       if (name in target) {
@@ -23,10 +22,9 @@ const mergeExternals = (target: ExternalRecords, ...sources: ExternalRecords[]) 
           } else {
             target[name].set(sourceRange, sourceResolve);
           }
-        })
+        });
       } else {
         target[name] = new Map(ranges);
-
       }
     });
   });

@@ -1,16 +1,24 @@
-import {CLINodeChunk, CLINodeResult, CLIRenderContext, ExternalModule, ExternalObject, ExternalRecords} from "../types";
+import {
+  CLINodeChunk,
+  CLINodeResult,
+  CLIRenderContext,
+  RawExternalModule,
+  ExternalObject,
+  ExternalRecords,
+  NormalizedExternal
+} from "../types";
 import createExternals from "../utils/createExternals";
 import mergeExternals from "../utils/mergeExternals";
 
 interface GetChunkNodeOptions {
   node: CLINodeResult;
-  externals?: ExternalModule[];
+  externals?: RawExternalModule[];
 }
 
 type GetChunkNode = (options: GetChunkNodeOptions, context: CLIRenderContext) => CLINodeChunk;
 
 const updateAllMergedExternals = (externals: ExternalRecords, container: string) => {
-  const setAllContainer = (mergedResolve: ExternalObject) => {
+  const setAllContainer = (mergedResolve: NormalizedExternal) => {
     mergedResolve.container = container;
     mergedResolve.merged?.forEach(setAllContainer)
   };

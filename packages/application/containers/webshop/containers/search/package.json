@@ -21,7 +21,7 @@
     "webpack-stats-plugin": "^1.0.3"
   },
   "dependencies": {
-    "react": "^16.0.2"
+    "react": "^17.0.2"
   },
   "root": ".dist/public/search_f2bdd935655d3a5b9ebb.js"
 }

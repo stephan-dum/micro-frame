@@ -31,14 +31,11 @@ const createPlugins = (plugins: MicroFramePlugin[], publicPath: string, resolveO
   fs.copyFileSync(clientPluginSrc, clientPluginDest);
   return {
     type: plugin.type,
-    src: '/'+baseName,
+    src: baseName,
     lazy: plugin.lazy,
+    // lazy: false,
   };
 });
-
-// import react from 'react';
-//
-// global.React = react;
 
 interface LocalGlobal {
   importExternal: (container: string, url: string) => Record<string, any>;
@@ -47,36 +44,21 @@ interface LocalGlobal {
 declare const global: LocalGlobal;
 
 const ssrProxy: SSRProxy = (config) => {
-  const { plugins, publicPath, root, privatePath, projectRoot, container, resolved } = config;
+  const { plugins, publicPath, root, privatePath, projectRoot, container, rootEntry } = config;
   const resolveOptions = { paths: [projectRoot] };
 
-  const { default: rootNode, ...containerContext } = require(path.join(projectRoot, '.dist/public/root/root'));
   const externalsMap = require(path.join(projectRoot, privatePath, 'externals/index.js')).default;
-  console.log('## externalsMap', externalsMap);
   global.importExternal = (container: string, url: string) => {
-    console.log('nodeImport', container, url);
+    console.log('nodeImport', container, url, externalsMap);
     const module = require(externalsMap[container][url]);
     return module.default || module;
   };
 
-  console.log('## server config', config);
-  // const rootNode = () => ({
-  //   type: 'container',
-  // });
-  // const containerContext = {
-  //   assetsByChunkName: {},
-  //   externalsByChunkName: {},
-  //   entryByChunkName: {},
-  // };
-  // const { default: rootNode, ...containerContext } = require(path.join(cwd, privatePath, 'root.js'));
-
-  // const { default: rootNode, ...containerContext } = require(path.join(projectRoot, resolved));
-  console.log(containerContext, rootNode);
+  const rootNode = require(path.join(projectRoot, '.dist/public', rootEntry.container , rootEntry.path)).default;
 
   const clientPlugins = createPlugins(plugins, publicPath, resolveOptions);
   const microFrameClient = require.resolve('@micro-frame/browser/.dist/micro-frame.js');
   const fragmentHeadStart = path.join(__dirname, '../html-fragments/headStart.html');
-  // const fragmentBodyStart = path.join(__dirname, '../html-fragments/bodyStart.html');
 
   return async (request, response) => {
     const lang = 'de';
@@ -104,7 +86,7 @@ const ssrProxy: SSRProxy = (config) => {
         response.end();
       })
       .then(() => send(`</head><body>`))
-      .then(() => send(`<script>microFrame("/root/root.js", ${JSON.stringify(clientPlugins)});</script>`));
+      .then(() => send(`<script>microFrame("${rootEntry.container}/${rootEntry.path}", "${container}", ${JSON.stringify(clientPlugins)});</script>`));
 
     const load = (id: string) => {
       return require(path.join(projectRoot, publicPath, id));
@@ -112,9 +94,8 @@ const ssrProxy: SSRProxy = (config) => {
 
     const context: IRenderContextSSR = {
       load,
-      containerName: 'root',
+      containerName: container,
       chunkName: 'root',
-      ...containerContext,
       provides: {},
       params: {},
       projectRoot,
@@ -134,11 +115,14 @@ const ssrProxy: SSRProxy = (config) => {
         }
       },
       props: {},
-      levelId: '0'
+      levelId: '0',
+      assetsByChunkName: {},
+      entryByChunkName: {},
+      externalsEntryByChunkName: {},
+      externalsByChunkName: {},
     };
 
     const preload = [
-      // { tagName: 'script', props: { type: "module", async: true, src: rootPath } },
       // service worker + manifest
       // load runtime-browser
       // preload fonts
@@ -155,16 +139,6 @@ const ssrProxy: SSRProxy = (config) => {
       await send(createReadStream(microFrameClient));
       response.write(`</script>`);
       response.write(preload);
-      // currentPromise = headSent
-      //   .catch(() => {
-      //     // TODO: add error page
-      //     Logger.error('Abort connection, head was not sent within 30 seconds!');
-      //   })
-      //   .then(() => send(`</head><body>`))
-      //   .then(() => send(`<script>microFrame("${root}", ${JSON.stringify(containerContext)}, ${JSON.stringify(clientPlugins)});</script>`));
-
-
-      // .then(() => send(createReadStream(fragmentBodyStart)));
 
       await createNode(rootNode, context).then(() => currentPromise);
 

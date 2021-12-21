@@ -13,8 +13,9 @@ const createNode = <Return>(node: StreamNode, context: any, isHydrate = false): 
   }
 
   if (typeof node === 'function') {
-    return Promise.resolve(node(context)).then((realNode) => {
-      return createNode(realNode, context, isHydrate);
+    const childContext = { ...context };
+    return Promise.resolve(node(childContext, isHydrate)).then((realNode) => {
+      return createNode(realNode, childContext, isHydrate);
     });
   }
 

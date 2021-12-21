@@ -1,19 +1,17 @@
 import {
-  ExternalModule,
-  ExternalNormalizedObjects,
+  RawExternalModule,
   ExternalRecords,
-  ResolveOptions
+  ResolveOptions, NormalizedExternal
 } from "../types";
 
 import {intersects} from "semver";
 
-// @ts-ignore
 import normalizeExternal from './normalizeExternal';
-import * as path from "path";
+import path from "path";
 
 
 const createExternals = (
-  rawExternals: ExternalModule[],
+  rawExternals: RawExternalModule[],
   resolveOptions: ResolveOptions,
   container: string,
   allParentExternals: ExternalRecords,
@@ -24,11 +22,12 @@ const createExternals = (
   const packageJSON = require(packageJSONPath);
 
   rawExternals.forEach((rawExternal) => {
-    const external = normalizeExternal(rawExternal);
+    const external = normalizeExternal(rawExternal) as NormalizedExternal;
     const externalName = external.name;
 
-    const externalPath = path.dirname(require.resolve(externalName, resolveOptions));
-    const externalPackageJSONPath = path.join(externalPath, 'package.json');
+    const externalPackageJSONPath = require.resolve(externalName + '/package.json', resolveOptions);
+    // const externalPath = path.dirname(require.resolve(externalName+'/package.json', resolveOptions));
+    // const externalPackageJSONPath = path.join(externalPath, 'package.json');
     const dependencyPackageJSON = require(externalPackageJSONPath)
 
     const range = packageJSON.dependencies[externalName] || packageJSON.devDependencies[externalName];
@@ -55,6 +54,8 @@ const createExternals = (
     external.merged = [];
     external.container = container;
     external.resolve = require.resolve(externalName, resolveOptions);
+    external.base = path.dirname(externalPackageJSONPath);
+
     external.version = dependencyPackageJSON.version;
     externals[externalName] = new Map([[range, external]]);
   });

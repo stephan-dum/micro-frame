@@ -1,32 +1,41 @@
-import { PnPNodeConstructor, PnPNode } from "@micro-frame/browser/types";
-import createNode from '@micro-frame/core/createNode';
+import { PnPNode, PnPNodeConstructor } from "@micro-frame/browser/types";
 import { ContainerNode } from "./types";
-import path from "path";
-const container: PnPNodeConstructor<ContainerNode> = async ({ name }, parentContext) => {
-  const { entryByChunkName, assetsByChunkName, externalsByChunkName } = parentContext;
+import createNode from "../../env-core/createNode";
 
-  // @ts-ignore
-  await parentContext.setAssets([
-    ...(parentContext.assetsByChunkName[name] || []),
-    ...(parentContext.externalsEntryByChunkName[name] || []),
-  ]);
+const container: PnPNodeConstructor<ContainerNode> = async ({ name }, parentContext, isHyrate) => {
+  const { entryByChunkName, assetsByChunkName, externalsByChunkName } = parentContext;
+  console.log('# client container parentContext', name, parentContext);
+
+  // externals are only preloaded and must be injected which is part of hydration
+  const assets = parentContext.externalsEntryByChunkName[name] || [];
+
+
+  if (!isHyrate) {
+    assets.push(...(assetsByChunkName[name] || []));
+  }
+
+  await parentContext.setAssets(assets);
 
   const {
-    default: node,
-    ...subContext
-  } = await externalImport('/' + entryByChunkName[name]);
+    default: nodeFactory,
+    // ...subContext
+  } = await parentContext.load(name + entryByChunkName[name].slice(1));
 
   const childContext = {
     ...parentContext,
-    ...subContext
+    containerName: name,
   };
 
-  console.log('container client end', node, childContext);
-
+  const node = await createNode<PnPNode>(nodeFactory, childContext, isHyrate);
+  console.log('## client container node', node);
 
   return {
+    navigate: (...args) => {
+      return node.navigate?.(...args);
+    },
     unload: () => {
-      // remove all assets
+      parentContext.removeAssets(assets);
+      node.unload();
     }
   }
 }

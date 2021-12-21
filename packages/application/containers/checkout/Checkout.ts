@@ -9,7 +9,8 @@ const Checkout = {
     {
       type: "chunk",
       aboveFold: true,
-      chunk: () => import('./components/CheckoutHeader'),
+      chunkName: 'checkout_header',
+      chunk: () => import(/* webpackChunkName: "checkout_header" */ './components/CheckoutHeader'),
     },
     {
       type: 'router',

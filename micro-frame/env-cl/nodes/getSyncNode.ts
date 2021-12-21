@@ -1,9 +1,9 @@
 import createExternals from "../utils/createExternals";
-import {CLINodeLeaf, CLIRenderContext, ExternalModule, ExternalsOptions} from "../types";
+import {CLINodeLeaf, CLIRenderContext, RawExternalModule, ExternalsOptions} from "../types";
 import mergeExternals from "../utils/mergeExternals";
 
 interface getModuleNodeOptions {
-  externals?: ExternalModule[];
+  externals?: RawExternalModule[];
 }
 
 type GetSyncNode = (node: getModuleNodeOptions, context: CLIRenderContext, externals: ExternalsOptions) => CLINodeLeaf;

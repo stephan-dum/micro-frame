@@ -13,34 +13,34 @@ import { Configuration } from "webpack";
 const getResolve = require("../getResolve");
 const getTypescriptRule = require("../rules/getTypescriptRule");
 
-const externalsToAssets = (externals: ExternalRecords, container: string, allExternals: ExternalRecords) => Object.entries(externals).map(
-  ([name, versions]) => {
-    const externalAssets: string[] = [];
-
-    Object.entries(versions).forEach(([version, resolve]) => {
-        if(!allExternals[name]?.has(version)) {
-          const externalAsset = `/${container}/${name}${version}.js`;
-          // const external = { resolve: externalAsset, container };
-          // TODO: this needs to be fix something is wrong in typing
-          // const external = { paths: ['external ']};
-          // if (name in allExternals) {
-          //   allExternals[name][version] = resolve;
-          // } else {
-          //   allExternals[name] = { [version]: resolve };
-          // }
-
-          externalAssets.push(externalAsset)
-        }
-      }
-    );
-
-    return externalAssets;
-  }
-).flat();
-
-function prefixAssetPaths(this: string, asset: string) {
-  return path.join('/', this, asset).replace(/\\/g, '/');
-}
+// const externalsToAssets = (externals: ExternalRecords, container: string, allExternals: ExternalRecords) => Object.entries(externals).map(
+//   ([name, versions]) => {
+//     const externalAssets: string[] = [];
+//
+//     Object.entries(versions).forEach(([version, resolve]) => {
+//         if(!allExternals[name]?.has(version)) {
+//           const externalAsset = `/${container}/${name}${version}.js`;
+//           // const external = { resolve: externalAsset, container };
+//           // TODO: this needs to be fix something is wrong in typing
+//           // const external = { paths: ['external ']};
+//           // if (name in allExternals) {
+//           //   allExternals[name][version] = resolve;
+//           // } else {
+//           //   allExternals[name] = { [version]: resolve };
+//           // }
+//
+//           externalAssets.push(externalAsset)
+//         }
+//       }
+//     );
+//
+//     return externalAssets;
+//   }
+// ).flat();
+//
+// function prefixAssetPaths(this: string, asset: string) {
+//   return path.join('/', this, asset).replace(/\\/g, '/');
+// }
 
 const getVersionName = (name: string, version: string = '') => (name+version).replace(/[\^@/=><.*+-]/g, '_');
 
@@ -49,12 +49,18 @@ const getExternalsMap = (externalsByChunkName: ContainerWebpackConfig["externals
   Object.entries(externalsByChunkName).forEach(([chunkName, externals]) => {
     externalsMap[chunkName] = {};
     Object.entries(externals).forEach(([externalName, external]) => {
-      externalsMap[chunkName][externalName] = [external.container, getVersionName(externalName, external.version)]
+      if (external.exports.default) {
+        externalsMap[chunkName][externalName] = [
+          getVersionName(external.container),
+          getVersionName(externalName, external.version)
+        ];
+      }
     });
   });
   return JSON.stringify(externalsMap);
 }
 const getNodeExternalsMap = (externalsByChunkName: ContainerWebpackConfig["externalsByChunkName"], serverExternals: Record<string, Record<string, string>>) => {
+  console.log('### getNodeExternalsmap', externalsByChunkName)
   Object.entries(externalsByChunkName).forEach(([chunkName, externals]) => {
     if (!(chunkName in serverExternals)) {
       serverExternals[chunkName] = {};
@@ -63,26 +69,45 @@ const getNodeExternalsMap = (externalsByChunkName: ContainerWebpackConfig["exter
     Object.entries(externals).forEach(([externalName, external]) => {
       // TODO: merge or overwrite externals from different usages!?
       if (!(externalName in externalsMap)) {
-        externalsMap[externalName] = external.resolve;
+        const { default: fallback, node = fallback } = external.exports;
+
+        if (node) {
+          externalsMap[path.join(externalName, node.path).replace(/\\/g, '/')] = path.join(external.base, node.path);
+        } else {
+          externalsMap[externalName] = external.resolve;
+        }
+        // externalsMap[externalName] = external.resolve;
       }
     });
   });
 }
 
-const createExternalFile = (externals: ExternalRecords, parentExternals: ExternalRecords, externalsByChunkName: ExternalsByChunkName, container: string) => [
-  // ...Object.entries(parentExternals).map(
-  //   ([name, versions]) => Array.from(versions.values()).map((external) => {
-  //     return `export const ${getVersionName(name, external.version)} = importExternal('${getVersionName(name, external.version)}', '${external.container}');`;
-  //   }).join('\n')
-  // ),
-  ...Object.entries(externals).map(
-    ([name, versions]) => Array.from(versions.values()).map(
-      (external) => {
-        return `export { default as ${getVersionName(name, external.version)} } from '${external.resolve.replace(/\\/g, '\\\\')}';`;
-      }).join('\n')
-  ),
-  `importExternal.register(${getExternalsMap(externalsByChunkName)});`,
-].join('\n');
+const createExternalFile = (externals: ExternalRecords, parentExternals: ExternalRecords, externalsByChunkName: ExternalsByChunkName, container: string) => {
+  const imports: string[] = [];
+  const exportsMap: string[] = [];
+
+  Object.entries(externals).forEach(
+    ([name, versions]) => Array.from(versions.values()).forEach(
+      ({exports, version, base}) => {
+        const {default: browser} = exports;
+
+        if (browser) {
+          const versionedName = getVersionName(name, version);
+          imports.push(`import { default as ${versionedName} } from '${path.join(base, browser.path).replace(/\\/g, '\\\\')}';`);
+          exportsMap.push(`${getVersionName(name, version)}`);
+        }
+      })
+  );
+
+  return [
+    ...imports,
+    `importExternal.register(`,
+      `${getExternalsMap(externalsByChunkName)},`,
+      `'${container}',`,
+      `{${exportsMap.join(',')}},`,
+    `);`,
+  ].join('');
+};
 
 const upsertNoParseExternals = (noParseExternals: Set<string>, neededExternals: NeededExternals) => {
   Object.values(neededExternals).forEach(({ noParse, resolve }) => {
@@ -94,10 +119,10 @@ const upsertNoParseExternals = (noParseExternals: Set<string>, neededExternals: 
 
 const createEntry = (fileName: string, dir: string, container: string) => ({
   import: path.join(dir, fileName),
-  library: {
-    type: 'var',
-    name: [`__externals`, `${getVersionName(container)}`],
-  },
+  // library: {
+  //   type: 'var',
+  //   name: [`__externals`, `${getVersionName(container)}`],
+  // },
 });
 
 export interface ExternalsConfig {
@@ -161,6 +186,11 @@ const getClientConfig = (env: ConfigEnvironment, options: ConfigOptions, config:
     name: 'externals_web',
     target: 'web',
     entry,
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+      },
+    },
     output: {
       filename: './[name]_[contenthash].js',
       publicPath: '/',
@@ -195,7 +225,7 @@ const getExternalsConfig = (env: ConfigEnvironment, options: ConfigOptions, conf
   const serverFS: InternalFS = {
     "index.js": `export default ${JSON.stringify(serverExternals)}`
   };
-  console.log(serverFS["index.js"]);
+
   return [
     getClientConfig(env, options, config, clientFS, entry),
     getNodeConfig(env, options, config, serverFS),

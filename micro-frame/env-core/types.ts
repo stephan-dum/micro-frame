@@ -1,7 +1,7 @@
 import { Service } from "../../packages/services/types";
-import { ExternalNormalizedObjects, ExternalRecords, NeededExternals } from "../env-cl/types";
+import { NormalizedExternal, ExternalRecords, NeededExternals } from "../env-cl/types";
 
-export type ExternalsByChunkName = Record<string, Record<string, ExternalNormalizedObjects>>;
+export type ExternalsByChunkName = Record<string, Record<string, NormalizedExternal>>;
 
 export interface IRenderContext {
   // queueResponse: QueueResponse;
@@ -32,7 +32,7 @@ export interface MicroNode {
 }
 
 export type NodeResult = MicroNode | MicroNode[];
-type NodeFactory = (context: IRenderContext) => NodeResult;
+type NodeFactory = (context: IRenderContext, isHydrate?: boolean) => NodeResult;
 
 export interface PnPLocation {
   pathname: string;

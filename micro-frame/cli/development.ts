@@ -10,6 +10,7 @@ import { MicroFrameConfig, MicroFramePlugin } from "./types";
 import federation from "@micro-frame/env-cl";
 import createServer from "../env-node/create-server";
 
+const getReactPluginConfigs = require('../plugins/react/webpack.config.js');
 const getEnvBrowserConfig = require('../env-browser/webpack.config.js');
 const getContainerConfig = require('@micro-frame/webpack/configs/getContainerConfig');
 
@@ -62,15 +63,6 @@ const run = async () => {
   const glob = isRoot ? ROOT_GLOB : getContainerGlob(container);
 
   if ("staticPath" in globalConfig) {
-    // const staticFiles = await fs.readdir(globalConfig.staticPath);
-    // await Promise.all(staticFiles.map((file) => {
-    //   var curSource = path.join( source, file );
-    //   if ( fs.lstatSync( curSource ).isDirectory() ) {
-    //     copyFolderRecursiveSync( curSource, targetFolder );
-    //   } else {
-    //     copyFileSync( curSource, targetFolder );
-    //   }
-    // }))
     await fse.copy(globalConfig.staticPath, globalConfig.publicPath);
   }
 
@@ -103,24 +95,27 @@ const run = async () => {
   const containerPackageJSON = await dynamicImport<PackageJSON>(context + '/package.json');
   const { name: containerPackageName } = containerPackageJSON;
 
-  const { externals = [], entry, dist, name, statsFile: statsFilePath } = await dynamicImport<MicroFrameContainerConfig>(globCWD + '/'+ containerConfigPath);
+  const { externals = [], entry, dist, name } = await dynamicImport<MicroFrameContainerConfig>(globCWD + '/'+ containerConfigPath);
   const containerConfig = await getContainerConfig(env, options, { context, name, externals, entry, dist, containerPackageName });
   const devConfig = getDevServerConfig(env, options);
+
+  const reactPluginConfigs = getReactPluginConfigs(env, options);
   const envBrowserConfig = getEnvBrowserConfig(env, options);
   const configs = [
     devConfig,
-    containerConfig,
     envBrowserConfig,
+      ...reactPluginConfigs,
+    containerConfig,
   ];
 
   await webpackPromise(configs);
 
-  await federation(env, options, { cwd: projectRoot, base: context, root: containerPackageName, publicPath: globalConfig.publicPath });
+  const rootEntry = await federation(env, options, { cwd: projectRoot, base: context, root: containerPackageName, publicPath: globalConfig.publicPath });
 
-  const privatePath = typeof dist === "object" && dist.private || globalConfig.privatePath;
-  const statsFile = require(statsFilePath || path.join(context, privatePath, './stats.json'));
-  const resolved = path.join(path.dirname(statsFile.root), containerPackageName, path.basename(statsFile.root));
-  await createServer({ ...globalConfig, projectRoot, resolved, root: context, container: containerPackageName });
+  // const privatePath = typeof dist === "object" && dist.private || globalConfig.privatePath;
+  // const statsFile = require(path.join(context, statsFilePath));
+  // const resolved = path.join(statsFile.publicPath, containerPackageName, statsFile.entryByChunkName[statsFile.entry]);
+  await createServer({ ...globalConfig, projectRoot, root: context, container: containerPackageName, rootEntry });
 };
 
 run();

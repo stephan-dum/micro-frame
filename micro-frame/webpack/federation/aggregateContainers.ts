@@ -6,7 +6,6 @@ import {
   NeededExternals, NormalizedInject, NormalizedProvide,
 } from "@micro-frame/env-cl/types";
 
-// import { readFileSync } from "fs";
 import path from "path";
 import { ConfigEnvironment, ConfigOptions } from "../types";
 import { copyFile, readFile, writeFile } from "fs/promises";
@@ -30,7 +29,6 @@ const getUMDExternals = (neededExternals: NeededExternals, container: string) =>
 
   return content.join('');
 };
-
 
 // bytes
 const EXTERNAL_MIN_SIZE = 40000;
@@ -125,19 +123,30 @@ const createInjects = (injects: NormalizedInject) => {
 //   return JSON.stringify(externalsMap);
 // }
 
+const chunkTransform = (rawContent: string, config: ContainerWebpackConfig, stats: StatsCompilation, assetsByChunkName: AssetRecords) => {
+  const { container, neededExternals } = config;
+  return [
+    getUMDExternals(neededExternals, container),
+    rawContent,
+  ].join('');
+};
+
 const exportReplacement = 'const __nodeFactory = $1;';
 const transform = (rawContent: string, config: ContainerWebpackConfig, stats: StatsCompilation, assetsByChunkName: AssetRecords) => {
   const { neededExternals, container, provides, injects, base, entry, externalsEntryByChunkName, entryByChunkName, parentExternalsEntryByChunkName } = config;
-  console.log('## entries', stats.entrypoints);
-  parentExternalsEntryByChunkName[container] = stats.entrypoints[container].assets.map(({ name }) => path.join('externals', name))
+
+  const parsedEntryByChunkName: Record<string, string> = {};
+  Object.entries(entryByChunkName).forEach(([chunkName, chunk]) => {
+    parsedEntryByChunkName[chunkName] = chunk.path;
+  });
 
   return [
     getInlinedExternals(stats, container),
     getUMDExternals(neededExternals, container),
 
     rawContent
-      .replace(/export\s*{\s*(\w+) as default\s*};/, exportReplacement)
-      .replace(/export default (\w+);/, exportReplacement),
+      .replace(/export\s*{\s*(\w+)\s+as\s+default\s*};/, exportReplacement)
+      .replace(/export\s+default\s+(\w+);/, exportReplacement),
 
     `export default (context) => {`,
       createInjects(injects),
@@ -147,7 +156,7 @@ const transform = (rawContent: string, config: ContainerWebpackConfig, stats: St
         `assetsByChunkName: ${JSON.stringify(assetsByChunkName)},`,
         // `externalsByChunkName: ${getExternalsMap(externalsByChunkName)},`,
         `externalsEntryByChunkName: ${JSON.stringify(externalsEntryByChunkName)},`,
-        `entryByChunkName: ${JSON.stringify(entryByChunkName)},`,
+        `entryByChunkName: ${JSON.stringify(parsedEntryByChunkName)},`,
       `});`,
 
       `return typeof __nodeFactory === 'function' ? __nodeFactory(context) : __nodeFactory;`,
@@ -160,39 +169,65 @@ interface AggregationConfig {
   webpackConfigs: ContainerWebpackConfig[];
   stats: StatsCompilation;
 }
+const copyContainerAssets = ({ container, assetsByChunkName, dist, base }: ContainerWebpackConfig, toBase: string) => {
+  const normalizedAssetsByChunkName: AssetRecords = {};
 
-const aggregateContainers = (env: ConfigEnvironment, options: ConfigOptions, { webpackConfigs, stats, publicPath }: AggregationConfig) => {
-  const { root } = env;
-
-  return Promise.all(webpackConfigs.map((config) => {
-    const { resolved, container, assetsByChunkName } = config;
-    const toBase = path.join(root, publicPath);
-    const normalizedAssetsByChunkName: AssetRecords = {};
-
-    return Promise.all([
-      ...Object.entries(assetsByChunkName).map(
-        ([chunkName, assets]) => {
-          const normalizedAssets: string[] = [];
+  return Promise.all(
+    Object.entries(assetsByChunkName).map(([chunkName, assets]) =>
+      Promise.all(assets.map((asset) => {
+        const filePath = path.join(container, path.basename(asset));
+        return copyFile(asset, path.join(toBase, filePath)).then(() => filePath);
+      }))
+        .then((normalizedAssets) => {
           normalizedAssetsByChunkName[chunkName] = normalizedAssets;
-
-          return assets.map((asset) => {
-            const filePath = path.join(chunkName, path.basename(asset));
-            normalizedAssets.push(filePath);
-
-            return mkdirp(path.join(toBase, chunkName))
-              .then(() => copyFile(asset, path.join(toBase, filePath)));
-          });
-        }
-      ).flat(),
-      mkdirp(path.join(toBase, container))
-      .then(() => readFile(resolved, 'utf-8'))
-      .then((content) => writeFile(
-        path.join(toBase, container, path.basename(resolved)),
-        transform(content, config, stats, normalizedAssetsByChunkName)
-      )),
-    ]);
-
-  }));
+        })
+    ).flat()
+  ).then(() => normalizedAssetsByChunkName);
 };
+
+type AggregateContainers = (env: ConfigEnvironment, options: ConfigOptions, config: AggregationConfig) => Promise<void>;
+const prepareTransform = (normalizedAssetsByChunkName: AssetRecords, config: ContainerWebpackConfig, toBase: string, stats: StatsCompilation) => {
+  const { container, entryByChunkName, parentExternalsEntryByChunkName, entry } = config
+console.log('# buid', entryByChunkName);
+  return Promise.all(Object.entries(entryByChunkName).map(([chunkName, chunk]) => {
+    if (chunk.container !== container) {
+      return;
+    }
+
+    // if (isContainer) {
+    //   parentExternalsEntryByChunkName[container] = stats.entrypoints[container].assets.map(({ name }) => path.join('externals', name))
+    // }
+
+    const isContainer = chunkName === entry;
+    const transformer = isContainer ? transform : chunkTransform;
+
+    return readFile(path.join(chunk.base, chunk.publicPath, chunk.path), 'utf-8')
+      .then((rawContent) => {
+        return writeFile(
+          path.join(toBase, chunk.container, chunk.path),
+          transformer(rawContent, config, stats, normalizedAssetsByChunkName),
+        );
+      });
+  }));
+
+}
+
+const toVoid = () => {};
+const aggregateContainers: AggregateContainers = (
+  { root },
+  options,
+  { webpackConfigs, stats, publicPath }
+) => Promise.all(webpackConfigs.map((config) => {
+  const { container, parentExternalsEntryByChunkName } = config;
+  const toBase = path.join(root, publicPath);
+
+  // this must be executed sync to guarantee order
+  parentExternalsEntryByChunkName[container] = stats.entrypoints[container].assets.map(({ name }) => path.join('externals', name))
+
+  return mkdirp(path.join(toBase, container))
+    .then(() => copyContainerAssets(config, toBase).then(
+      (assetsByChunkName) => prepareTransform(assetsByChunkName, config, toBase, stats)
+    ));
+})).then(toVoid);
 
 export default aggregateContainers;

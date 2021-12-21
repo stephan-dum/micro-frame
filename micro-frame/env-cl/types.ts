@@ -1,4 +1,5 @@
 import { ExternalsByChunkName, IRenderContext, MicroNode } from "@micro-frame/core/types";
+import { EntryByChunkName } from "../webpack/configs/getContainerConfig";
 
 interface RecursiveRecord<T> {
   [index: string]: T;
@@ -14,28 +15,91 @@ export interface PackageJSON extends Record<string, any> {
 //   container: string;
 // }
 type ExternalImports = string | string[];
-type ExternalExports = string | string[];
+// type ExternalExports = string | string[];
+type Environments = 'node' | 'browser';
+
+interface RawExternalExportsObject {
+  pick?: ExternalImports;
+  path?: string;
+}
+export interface RawExternalExports extends RawExternalExportsObject {
+  node?: RawPackageExports;
+  default?: RawPackageExports;
+}
+
+
+type RawImportPaths = string | string[];
+interface RawImportEnvironments {
+  node?: RawImportPaths;
+  browser?: RawImportPaths;
+  default?: RawImportPaths
+}
+interface RawImportModes {
+  production?: RawImportEnvironments;
+  development?: RawImportEnvironments
+}
+type RawImports = RawImportModes & RawImportEnvironments;
+
+interface NewRawExternalObject {
+  type: string;
+  packageName: string;
+  imports: RawImports;
+}
+// const myExternals: NewRawExternalObject[] = [{
+//   type: 'module',
+//   packageName: '@mf/env-browser',
+//   imports: {
+//     default: '',
+//     browser: '',
+//     node: '',
+//   },
+// }];
+
+
+export type RawPackageExports = string | RawExternalExports;
 export interface ExternalObject {
-  merged?: ExternalObject[];
   noParse?: boolean;
   type: string;
   name: string;
-  container?: string;
-  chunkName?: string;
-  imports?: ExternalImports;
-  resolve?: string;
-  version?: string;
+  exports?: RawPackageExports;
 }
-
-interface ExternalObjectUMD extends ExternalObject {
-  type: 'umd',
+interface RawExternalObjectUMD extends ExternalObject {
+  type: 'umd';
   varName?: string; // default to name
 }
-interface ExternalObjectModule extends ExternalObject {
-  type: 'module',
+export interface RawExternalObjectModule extends ExternalObject {
+  type: 'module';
 }
-export type ExternalNormalizedObjects = ExternalObjectModule | ExternalObjectUMD;
-export type ExternalModule = string | [string, ExternalExports] | ExternalObjectModule | ExternalObjectUMD;
+
+export type RawExternalModule = string | [string, RawPackageExports[]] | RawExternalObjectModule | RawExternalObjectUMD;
+
+interface NormalizedModule extends ExternalObject {
+  merged: ExternalObject[];
+  container: string;
+  chunkName: string;
+  base: string;
+  resolve: string;
+  version: string;
+  exports: NormalizedExports;
+}
+export interface NormalizedExportLeaf {
+  pick?: string[];
+  path: string;
+}
+export interface NormalizedExports {
+  default?: NormalizedExportLeaf;
+  node?: NormalizedExportLeaf;
+}
+interface NormalizedUMDModule extends NormalizedModule {
+  type: 'umd';
+  varName: string;
+}
+interface NormalizedExternalModule extends NormalizedModule {
+  type: 'module';
+}
+
+// export type NormalizedExternal = RawExternalObjectModule | RawExternalObjectUMD;
+export type NormalizedExternal = NormalizedExternalModule | NormalizedUMDModule;
 
 
 //
@@ -63,16 +127,16 @@ export interface MicroFrameContainerConfig {
   provides?: RawProvide;
   injects?: RawInject[];
   entry?: string;
-  externals?: ExternalModule[];
+  externals?: RawExternalModule[];
   services?: string[];
   statsFile?: string;
 }
 
-export type NeededExternals = Record<string, ExternalNormalizedObjects>;
+export type NeededExternals = Record<string, NormalizedExternal>;
 
 export type VersionSet = Map<
   string, // version
-  ExternalNormalizedObjects
+  NormalizedExternal
 >;
 
 export type ExternalRecords = Record<
@@ -121,7 +185,7 @@ export type NormalizedProvide = Record<string, ProvideObject>;
 //   type: 'provider';
 //   provide: RawProvide;
 //   children: MicroNode[];
-//   externals?: ExternalModule[];
+//   externals?: RawExternalModule[];
 // }
 
 // export type ProviderFactory = NodeTypesCL<ProviderNode>;
@@ -141,6 +205,7 @@ export interface CLINodeContainer extends CLINode {
   type: 'container';
   container: string;
   node: CLINodeResult;
+  dist: string;
   externalsByPlugins: Record<string, Record<string, ExternalRecords>>;
 }
 
@@ -157,6 +222,7 @@ export type CLINodeResult = CLINodeLeaf | CLINodeChunk | CLINodeIntersection | C
 
 export interface ContainerWebpackConfig {
   base: string;
+  dist: string;
   container: string;
   entry: string;
   // assets: string[];
@@ -166,25 +232,27 @@ export interface ContainerWebpackConfig {
   externalsEntryByChunkName: Record<string, string[]>;
   parentExternalsEntryByChunkName: Record<string, string[]>;
   externals: ExternalRecords;
-  // rawExternals: ExternalModule[];
+  // rawExternals: RawExternalModule[];
   neededExternals: NeededExternals;
   parentExternals: ExternalRecords;
   assetsByChunkName: AssetRecords;
-  entryByChunkName: EntryRecords;
+  entryByChunkName: EntryByChunkName;
   externalsByChunkName: ExternalsByChunkName;
   externalsByPlugins: Record<string, Record<string, ExternalRecords>>
 }
 export type InternalFS = Record<string, string>;
 export type AssetRecords = Record<string, string[]>;
-export type EntryRecords = Record<string, string>;
+// export type EntryRecords = Record<string, string>;
 export interface RawStatsFile {
   assetsByChunkName: AssetRecords;
   entrypoints: Record<string, string>;
 }
 export interface StatsFile {
+  entryByChunkName: EntryByChunkName;
   assetsByChunkName: AssetRecords;
   entry: string;
-  root: string;
+  publicPath: string;
+  // root: string;
 }
 export interface BuildContext {
   publicPath: string;
@@ -194,7 +262,7 @@ export interface BuildContext {
   resolveOptions: ResolveOptions;
   assetsByChunkName: AssetRecords;
   externalsByChunkName: Record<string, string[]>;
-  entryByChunkName: EntryRecords;
+  entryByChunkName: EntryByChunkName;
   webpackConfigs: ContainerWebpackConfig[];
   internalFS: InternalFS;
   resolveByContainer: Record<string, ResolveOptions>;
@@ -217,7 +285,7 @@ export interface ExternalsOptions {
 }
 export interface NodeTypesCL<Node = unknown> {
   (node: Node, context: CLIRenderContext, externals: ExternalsOptions): PromisedCLINodeResult;
-  externals?: ExternalModule[];
+  externals?: RawExternalModule[];
   dirname?: string;
 }
 
@@ -227,7 +295,7 @@ export interface ResolveOptions {
   paths: string[];
 }
 
-export interface CLIRenderContext extends IRenderContext, Pick<PackageJSON, "dependencies"> {
+export interface CLIRenderContext extends Omit<IRenderContext, 'entryByChunkName'>, Pick<PackageJSON, "dependencies"> {
   // parentExternals: ExternalRecords;
   // inputFS: Record<string, string | string[]>,
   // publicPath: string;
@@ -240,7 +308,7 @@ export interface CLIRenderContext extends IRenderContext, Pick<PackageJSON, "dep
   resolveOptions: ResolveOptions;
   assetsByChunkName: AssetRecords;
   // externalsByChunkName: Record<string, string[]>;
-  entryByChunkName: EntryRecords;
+  entryByChunkName: EntryByChunkName;
   resolveByContainer: Record<string, ResolveOptions>;
 }
 

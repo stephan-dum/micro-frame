@@ -6,13 +6,13 @@ import { IRouteProps, RouterNode } from "./types";
 
 const PnPRouter: PnPNodeConstructor<RouterNode> = async ({ routes }, parentContext, isHydrate) => {
   let activeRoute: IRouteProps = null;
-  let chunk: PnPNode = null;
+  let activeChunk: PnPNode = null;
 
   const navigate = async (location: PnPLocation, shouldHydrate = false) => {
     const { route, remaining, params } = getRouteMatch(routes, location.pathname);
 
     if(activeRoute !== route) {
-      chunk?.unload();
+      activeChunk?.unload();
       activeRoute = route;
 
       if (!route) {
@@ -29,11 +29,11 @@ const PnPRouter: PnPNodeConstructor<RouterNode> = async ({ routes }, parentConte
         },
       };
 
-      const node = route.node || { type: 'container', name: route.container };
-      // (await externalImport(route.container[0])).default;
-      chunk = await createNode(node, context, shouldHydrate);
-    } else if(chunk) {
-      return chunk.navigate?.({
+      const node = route.node || route.chunk && (await route.chunk()).default || { type: 'container', name: route.container };
+
+      activeChunk = await createNode(node, context, shouldHydrate);
+    } else if(activeChunk) {
+      return activeChunk.navigate?.({
         ...location,
         pathname: remaining
       });
@@ -45,7 +45,7 @@ const PnPRouter: PnPNodeConstructor<RouterNode> = async ({ routes }, parentConte
   return {
     navigate,
     unload: () => {
-      chunk.unload();
+      activeChunk.unload();
     },
   }
 }

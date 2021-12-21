@@ -11,19 +11,19 @@ const assetTypes: Record<string, AssetHandler> = {
   css: (href) => {
     return Object.assign(document.createElement('link'), {
       rel: 'stylesheet',
-      href,
+      href: '/' + href,
     });
   },
   mjs: (src) => {
     return Object.assign(document.createElement('script'), {
       type: 'module',
-      src,
+      src: '/' + src,
     });
   },
   js: (src) => {
     return Object.assign(document.createElement('script'), {
       async: true,
-      src: src.replace(/\.mjs$/, '.js'),
+      src: '/' + src.replace(/\.mjs$/, '.js'),
     });
   },
   jsm: (src) => {
@@ -42,42 +42,77 @@ const createAsset = (asset: string) => {
   throw new ReferenceError(`No file extension given for ${asset}`);
 };
 
-const init: Init = async (rootPath, plugins = [], virtualNode= document.body) => {
+interface ActiveAsset {
+  usage: number;
+  node: HTMLElement;
+  promise: Promise<void>;
+}
+const activeAssets: Record<string, ActiveAsset> = {};
+const init: Init = async (rootPath, rootContainer, plugins = [], virtualNode= document.body) => {
+  const load = (path: string) => {
+    console.log('## load', path);
+    return window.esImport('/' + path)
+  };
+
   const context = {
     virtual: getInsertVirtual(virtualNode),
     location: document.location,
     levelId: '0',
+    containerName: rootContainer,
     provides: {},
+    removeAssets: (assets: string[]) => {
+      assets.forEach((rawAsset) => {
+        const asset = activeAssets[rawAsset];
+        asset.usage -= 1;
+
+        if(asset.usage === 0) {
+          delete activeAssets[rawAsset];
+          document.head.removeChild(asset.node);
+        }
+      });
+    },
     setAssets: (assets: string[]) => {
-      console.log('## setting assets', assets);
       return Promise.all(
         assets.map((rawAsset) => {
-          const asset = createAsset(rawAsset);
-          const promise = new Promise((resolve) => {
-            asset.onload = resolve;
-          });
-          document.head.appendChild(asset);
-          return promise.then(() => asset);
+          if (!(rawAsset in activeAssets)) {
+            const assetNode = createAsset(rawAsset);
+
+            const promise = new Promise((resolve) => {
+              assetNode.onload = resolve;
+            }).then(() => {});
+
+            document.head.appendChild(assetNode);
+            activeAssets[rawAsset] = {
+              usage: 0,
+              node: assetNode,
+              promise,
+            }
+          }
+
+          const asset = activeAssets[rawAsset];
+          asset.usage += 1;
+
+          return asset.promise;
         })
       );
     },
-    load: (path: string) => {
-      console.log('## load', path);
-      // @ts-ignore
-      return window.externalImport('/' + path);
-    },
+    load,
   };
 
   plugins.forEach(({ lazy, src, type }) => {
     if (lazy) {
-      defaultPlugins[type] = async (...args: any[]) => (await externalImport(src)).default(...args);
+      defaultPlugins[type] = async (...args: any[]) => (await load(src)).default(...args);
     } else {
 
     }
   });
 
-  const { default: rootNode } = await externalImport(rootPath);
+  const { default: rootNode } = await load(rootPath);
 
+  // const rootNode = {
+  //   type: 'container',
+  //   name: rootPath,
+  // };
   const root = await createNode<PnPNode>(rootNode, context, true);
 
   addAnchorListener(root);

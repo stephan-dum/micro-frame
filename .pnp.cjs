@@ -43,6 +43,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:micro-frame/env-node"
       },
       {
+        "name": "@micro-frame/plugin-chunk",
+        "reference": "workspace:micro-frame/plugins/chunk"
+      },
+      {
         "name": "@micro-frame/plugin-container",
         "reference": "workspace:micro-frame/plugins/container"
       },
@@ -93,10 +97,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       {
         "name": "@xxxs-shop/react-hooks",
         "reference": "workspace:packages/react-hooks"
-      },
-      {
-        "name": "render-context",
-        "reference": "workspace:packages/render-context"
       },
       {
         "name": "@xxxs-shop/services",
@@ -179,6 +179,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@micro-frame/core", ["workspace:micro-frame/env-core"]],
       ["@micro-frame/env-cl", ["workspace:micro-frame/env-cl"]],
       ["@micro-frame/node", ["workspace:micro-frame/env-node"]],
+      ["@micro-frame/plugin-chunk", ["workspace:micro-frame/plugins/chunk"]],
       ["@micro-frame/plugin-container", ["workspace:micro-frame/plugins/container"]],
       ["@micro-frame/plugin-fetch", ["workspace:micro-frame/plugins/fetch"]],
       ["@micro-frame/plugin-file", ["workspace:micro-frame/plugins/file"]],
@@ -210,8 +211,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@xxxs-shop/services-svg", ["workspace:packages/services/svg"]],
       ["@xxxs-shop/services-translations", ["workspace:packages/services/translations"]],
       ["@xxxs-shop/utils", ["workspace:packages/utils"]],
-      ["@xxxs-shop/webshop", ["workspace:packages/application/containers/webshop"]],
-      ["render-context", ["workspace:packages/render-context"]]
+      ["@xxxs-shop/webshop", ["workspace:packages/application/containers/webshop"]]
     ],
     "fallbackPool": [
     ],
@@ -4179,6 +4179,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./micro-frame/env-core/",
           "packageDependencies": [
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
+            ["@micro-frame/plugin-chunk", "workspace:micro-frame/plugins/chunk"],
             ["@micro-frame/plugin-container", "workspace:micro-frame/plugins/container"],
             ["@micro-frame/plugin-fetch", "workspace:micro-frame/plugins/fetch"],
             ["@micro-frame/plugin-fragment", "workspace:micro-frame/plugins/fragment"],
@@ -4197,6 +4198,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/generator", "npm:7.16.0"],
             ["@babel/parser", "npm:7.16.4"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
+            ["@micro-frame/plugin-chunk", "workspace:micro-frame/plugins/chunk"],
             ["@micro-frame/plugin-container", "workspace:micro-frame/plugins/container"],
             ["@micro-frame/plugin-fetch", "workspace:micro-frame/plugins/fetch"],
             ["@micro-frame/plugin-file", "workspace:micro-frame/plugins/file"],
@@ -4245,6 +4247,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:4a005f53a87d19ae3c3e58d1be94975da1fb66838dbe104abac945281ea0970100031d4d3ed44095bda6de7d3e6e288d6c4e4838408bcbfb49f406a926919b25#npm:17.0.2"],
             ["webpack-node-externals", "npm:3.0.0"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@micro-frame/plugin-chunk", [
+        ["workspace:micro-frame/plugins/chunk", {
+          "packageLocation": "./micro-frame/plugins/chunk/",
+          "packageDependencies": [
+            ["@micro-frame/plugin-chunk", "workspace:micro-frame/plugins/chunk"],
+            ["@micro-frame/browser", "workspace:micro-frame/env-browser"],
+            ["@micro-frame/core", "workspace:micro-frame/env-core"],
+            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/node", "workspace:micro-frame/env-node"],
+            ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
+            ["@types/node", "npm:17.0.0"]
           ],
           "linkType": "SOFT",
         }]
@@ -4734,6 +4751,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-16.11.7-1799a0a435-2706403e6e.zip/node_modules/@types/node/",
           "packageDependencies": [
             ["@types/node", "npm:16.11.7"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:17.0.0", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-17.0.0-6f9c2e4e41-30970a70c2.zip/node_modules/@types/node/",
+          "packageDependencies": [
+            ["@types/node", "npm:17.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -5437,6 +5461,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@xxxs-shop/checkout", "workspace:packages/application/containers/checkout"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
+            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
             ["@micro-frame/plugin-react", "workspace:micro-frame/plugins/react"],
             ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
             ["@types/react", "npm:17.0.31"],
@@ -5594,7 +5619,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@xxxs-shop/services-logger", "workspace:packages/services/logger"],
             ["@xxxs-shop/services-svg", "workspace:packages/services/svg"],
             ["@xxxs-shop/services-translations", "workspace:packages/services/translations"],
-            ["react", "npm:16.14.0"],
+            ["react", "npm:17.0.2"],
             ["webpack-stats-plugin", "npm:1.0.3"]
           ],
           "linkType": "SOFT",
@@ -11590,16 +11615,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["react", [
-        ["npm:16.14.0", {
-          "packageLocation": "./.yarn/cache/react-npm-16.14.0-932446ec69-8484f3ecb1.zip/node_modules/react/",
-          "packageDependencies": [
-            ["react", "npm:16.14.0"],
-            ["loose-envify", "npm:1.4.0"],
-            ["object-assign", "npm:4.1.1"],
-            ["prop-types", "npm:15.7.2"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:17.0.2", {
           "packageLocation": "./.yarn/cache/react-npm-17.0.2-99ba37d931-b254cc17ce.zip/node_modules/react/",
           "packageDependencies": [
@@ -11819,22 +11834,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["relateurl", "npm:0.2.7"]
           ],
           "linkType": "HARD",
-        }]
-      ]],
-      ["render-context", [
-        ["workspace:packages/render-context", {
-          "packageLocation": "./packages/render-context/",
-          "packageDependencies": [
-            ["render-context", "workspace:packages/render-context"],
-            ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@xxxs-shop/dev-configs", "workspace:packages/dev-configs"],
-            ["@xxxs-shop/services-api", "workspace:packages/services/api"],
-            ["@xxxs-shop/services-config", "workspace:packages/services/config"],
-            ["@xxxs-shop/services-logger", "workspace:packages/services/logger"],
-            ["@xxxs-shop/services-svg", "workspace:packages/services/svg"],
-            ["@xxxs-shop/services-translations", "workspace:packages/services/translations"]
-          ],
-          "linkType": "SOFT",
         }]
       ]],
       ["renderkid", [

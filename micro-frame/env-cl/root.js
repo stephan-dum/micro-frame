@@ -1,13 +1,18 @@
-const root = (context) => {
-  const [containerName, path] = Array.from(Object.entries(context.entryByChunkName))[0];
-  console.log('# root', containerName, context);
-  return context.setAssets([
-    ...(context.assetsByChunkName[containerName] || []),
+const root = async (context, isHydrate) => {
+  console.log('## root context', isHydrate, context);
+  const assets = [
     ...context.externalsEntryByChunkName.root,
-  ])
-    .then(() => context.load(path))
-    .then((module) => module.default || module)
-    .then((module) => module(context));
+    ...(context.assetsByChunkName.root || []),
+  ];
+
+  if (!isHydrate) {
+    await context.setAssets(assets);
+  }
+
+  return {
+    type: 'container',
+    name: context.containerName,
+  };
 };
 
 export default root;

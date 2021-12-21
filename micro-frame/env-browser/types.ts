@@ -2,7 +2,12 @@ import {ClientPlugin, IRenderContext} from "@micro-frame/core/types";
 import { PnPLocation, StreamNode } from "@micro-frame/core/types";
 
 declare global {
-  const externalImport: (id: string) => Promise<any>;
+  type ESImport = (id: string) => Promise<any>;
+
+  const esImport: ESImport;
+  interface Window {
+    esImport: ESImport;
+  }
 }
 
 export interface VirtualNode {
@@ -21,6 +26,8 @@ export interface SubmitEvent extends Omit<Event, 'target'> {
 export interface IRenderContextClient extends IRenderContext {
   virtual: VirtualNode;
   location: PnPLocation;
+  setAssets: (asset: string[]) => Promise<void>;
+  removeAssets: (assets: string[]) => void;
 }
 
 export interface PnPNode {
@@ -37,4 +44,4 @@ export interface PnPNodeConstructor<Node = StreamNode> {
 //   externalsByChunkName: Record<string, string[]>;
 //   entryByChunkName: Record<string, string>;
 // }
-export type Init = (rootLibraryName: string, plugins: ClientPlugin[], htmlElement: HTMLElement) => Promise<void>;
+export type Init = (rootLibraryName: string, rootContainer: string, plugins: ClientPlugin[], htmlElement: HTMLElement) => Promise<void>;

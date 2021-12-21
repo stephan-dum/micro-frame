@@ -6,16 +6,13 @@
 <script>
   // TODO: parts of the file need a dedicated build or at lest types
   // TODO: this can be removed if webpack magic comments work with /* webpack-ignore:true; */
-  var externalImport = (id) => import(id);
-  // TODO: find better name an replace all usage
-  window.externalImport = externalImport;
-  window.normalImport = externalImport;
+  var esImport = (id) => import(id);
+  window.esImport = esImport;
 
   var __externals = {};
-  window.__externals = {};
   const externalsMap = {};
+
   var importExternal = (container, packageName) => {
-    console.log('## _externals', __externals);
     if (!(container in externalsMap)) {
       throw new ReferenceError(`Could not find ${packageName}, weak dependencies for ${container} not loaded!`)
     }
@@ -29,8 +26,15 @@
     return __externals[resolvedContainer][versionedPackageName];
   };
 
-  importExternal.register = (externalsByChunkName) => {
+  importExternal.register = (externalsByChunkName, container, externals) => {
     Object.assign(externalsMap, externalsByChunkName);
+    __externals[container] = externals;
+
+    console.log('# register', externalsMap, __externals);
+    // Object.assign(
+    //   externalsMap[container] || (externalsMap[container] = {}),
+    //   externalsByChunkName
+    // );
   };
 
   window.importExternal = importExternal;

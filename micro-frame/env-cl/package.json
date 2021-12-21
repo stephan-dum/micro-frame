@@ -6,6 +6,7 @@
     "@babel/generator": "^7.16.0",
     "@babel/parser": "^7.16.4",
     "@micro-frame/core": "1.0.0",
+    "@micro-frame/plugin-chunk": "1.0.0",
     "@micro-frame/plugin-container": "1.0.0",
     "@micro-frame/plugin-fetch": "1.0.0",
     "@micro-frame/plugin-file": "1.0.0",

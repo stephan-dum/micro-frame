@@ -56,7 +56,7 @@ const createServer = async () => {
   const app = express()
     .use(express.static(publicPath))
     // .use(test(config, CWD))
-    .use(ssrProxy(config, CWD));
+    .use(ssrProxy(config));
 
   app.listen(Number.parseInt(PORT), () => {
     Logger.info(`The server is running at http://localhost:${PORT}`);

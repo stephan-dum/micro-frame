@@ -1,7 +1,7 @@
 // import { ComponentType } from 'react';
 import { IRenderContext } from "@micro-frame/core/types";
 import { TemplateNode } from "@micro-frame/utils-create-element/types";
-import {ExternalModule, NodeTypesCL} from "@micro-frame/env-cl/types";
+import {RawExternalModule, NodeTypesCL} from "@micro-frame/env-cl/types";
 
 export type ReactFactoryCL = NodeTypesCL<ReactNode>;
 
@@ -16,13 +16,13 @@ export interface IPrepassComponent<Props = any> {
 type UniversalModule<Default = any> = {
   default: Default;
   __esModule: boolean;
-} & Default;
+} | Default;
 
-export type ReactNodeComponent = () => UniversalModule<IPrepassComponent>;
+export type ReactNodeComponent = UniversalModule<IPrepassComponent>;
 export interface ReactNode {
   type: 'react';
-  component: UniversalModule<IPrepassComponent>;
-  externals?: ExternalModule[];
+  component: IPrepassComponent;
+  externals?: RawExternalModule[];
   aboveFold?: boolean;
   props?: unknown;
   Wrapper?: TemplateNode;

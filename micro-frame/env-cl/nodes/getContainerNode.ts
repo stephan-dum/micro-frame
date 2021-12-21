@@ -1,10 +1,11 @@
-import {CLINodeContainer, CLINodeResult, CLIRenderContext, ExternalModule, ExternalRecords} from "../types";
+import {CLINodeContainer, CLINodeResult, CLIRenderContext, RawExternalModule, ExternalRecords} from "../types";
 import {mergeChunkExternals} from "./getChunkNode";
 
 interface GetContainerNodeOptions {
   externals: ExternalRecords;
   parentExternals: ExternalRecords;
   node: CLINodeResult;
+  dist?: string;
   externalsByPlugins: Record<string, Record<string, ExternalRecords>>;
 }
 
@@ -15,7 +16,8 @@ const getContainerNode: GetContainerNode = (
     node,
     externals,
     parentExternals,
-    externalsByPlugins
+    externalsByPlugins,
+    dist,
   },
   context
 ) => {
@@ -25,6 +27,7 @@ const getContainerNode: GetContainerNode = (
     externals: mergeChunkExternals(context, externals, node, parentExternals),
     externalsByPlugins,
     parentExternals,
+    dist,
     node,
   };
 };

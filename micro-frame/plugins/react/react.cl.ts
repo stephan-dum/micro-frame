@@ -5,13 +5,29 @@ const react: ReactFactoryCL = getSyncNode;
 
 react.externals = [
   "react",
-  [
-    "react-dom",
-    [
-      "render",
-      "hydrate"
-    ]
-  ]
+  // {
+  //   type: 'module',
+  //   name: "react-dom/server",
+  //   environments: ['node'],
+  // },
+  {
+    type: 'module',
+    name: 'react-dom',
+    exports: {
+      default: {
+        pick: ["render", "hydrate"],
+        path: './'
+      },
+      node: './server',
+    },
+  },
+  // [
+  //   "react-dom",
+  //   [
+  //     "render",
+  //     "hydrate"
+  //   ]
+  // ]
 ];
 
 // @ts-ignore

@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import {IPrepassComponent} from "@micro-frame/plugin-react/types";
-import './CheckoutHeader.scss'
+import styles from './CheckoutHeader.scss'
 
 const CheckoutHeader: IPrepassComponent = () => {
   useEffect(() => {
     console.log('client only');
-  }, [])
+  }, []);
   return (
-    <header className="header">
+    <header className={styles.header}>
       <ul>
         <li><a href="/">home</a></li>
       </ul>

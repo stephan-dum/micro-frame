@@ -5,6 +5,7 @@ import container from "@micro-frame/plugin-container/container.cl";
 import fragment from "@micro-frame/plugin-fragment/fragment.cl";
 import react from "@micro-frame/plugin-react/react.cl";
 import router from "@micro-frame/plugin-router/router.cl";
+import chunk from "@micro-frame/plugin-chunk/chunk.cl";
 import createExternals from "./createExternals";
 import mergeExternals from "./mergeExternals";
 
@@ -13,6 +14,7 @@ const types: Record<string, MicroNodeFactory> = {
   router,
   react,
   container,
+  chunk,
 }
 
 async function createNode(options: MicroNode, context: CLIRenderContext): Promise<CLINodeResult> {

@@ -12,11 +12,8 @@ const getModuleFederationPlugin = require('@micro-frame/webpack/plugins/getModul
 module.exports = (env, options) => {
   const { mode } = options;
 
-  const name = `runtime_browser_${mode}`;
-
   const base = {
     mode,
-    name,
     context: path.resolve(__dirname),
     ...getResolve(),
     module: {
