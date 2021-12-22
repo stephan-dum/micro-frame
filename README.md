@@ -1,7 +1,7 @@
 # micro-frame
 A framework for modular universal federation build with ssr streaming and micro frontends.
 
-(!) this is a very early alpha version.
+:warning: this is a very early alpha version.
 
 ## Abstract
 
@@ -16,8 +16,7 @@ A framework for modular universal federation build with ssr streaming and micro 
 - multiple framework / library possible
 
 ### webpack & federations
-All the effort the webpack team put into developing the eco-system further, is really appreciated, but I doubt that federations as its today will be the game changer that's been promised.
-- hard to find documentation (best source the 'examples repo')
+- hard to find documentation
 - the current concept involves a lot of lazy loading
 - chunk sizes can get to small if there are a lot of small components
   => atomic (ie button) should not be use as container but just as an external dependency!
@@ -27,11 +26,15 @@ All the effort the webpack team put into developing the eco-system further, is r
   - hmr is not working
   - bundle analyzer display stats from files
 
+[https://module-federation.github.io/](https://module-federation.github.io/)
+[https://github.com/module-federation/module-federation-examples](https://github.com/module-federation/module-federation-examples)
+
 ### yarn plug and play (PnP)
 
 set of best practice for modularization defined by yarn (facebook).
-- link to concept
-- link to migration path
+- [why shoul you update to yarn](https://yarnpkg.com/getting-started/qa)
+- [PnP API](https://yarnpkg.com/features/pnp)
+- [migration path](https://yarnpkg.com/getting-started/migration)
 
 resolves dependencies while installation and creates a mapping saved to `.pnp.cjs` file.
 It is injected at runtime, which means that you must always use yarn or dependencies will not be injected.
@@ -62,11 +65,66 @@ be a function or a plain object
 the inner async parts of a container
 needs a chunkName to match assetsByChunkName from webpack stats file within the container
 this will manage all the assets related an internal webpack chunk
-ie how to load them: inline vs preload & below the fold 
+ie how to load them: inline vs preload & below the fold
+if aboveFold is true then assets will be inline while ssr
+````typescript
+export default {
+  type: 'chunk',
+  chunkName: 'my-chunk',
+  chunk: () => import('./my-chunk'),
+  aboveFold: true,
+}
+````
 
 ### container
 inherits from chunk 
 can be started and executed independent
+container name references a dependency form package.json
+````typescript
+export default {
+  type: 'container',
+  name: 'my-container',
+  aboveFold: true,
+}
+````
+### fragment
+similar to react fragment to wrap multiple nodes, an array will be translated to fragment and acts as a shorthand.
+A Wrapper is a universal createElement similar to react, currently only the json notation is valid.
+It is used to send children while the end tag is not send
+
+to produce the following html a wrapper for main is needed
+````html
+<nav></nav>
+<main class="my-class">
+  <section></section>
+  <aside></aside>
+</main>
+````
+
+````typescript
+import styles from './some.scss';
+
+export default (context) => [
+  {
+    type: 'react',
+    component: Navigation
+  },
+  {
+    type: 'fragment',
+    Wrapper: { tagName: 'main', props: { className: styles['my-class'] } },
+    children: [
+      {
+        type: 'fetch',
+        url: `/render/article/${context.params.id}`,
+      },
+      {
+        type: 'preact',
+        component: Comments,
+      }
+    ]
+  }
+]
+````
 
 ### fetch
 this will fetch html from the given url and inject it, it also accepts options for fetch
@@ -82,7 +140,10 @@ export default {
 }
 ````
 ### react
-creates an independent react root which has one preassign context to handle hooks 
+creates an independent react root which has one preassign context to handle hooks
+provides a default wrapper that generate the dom node on which react will be mounted,
+can be overwritten with the Wrapper option (see fragment).
+
 ````typescript
 const MyComponent = () => {
   
@@ -94,6 +155,7 @@ export default {
   component: MyComponent,
 }
 ````
+
 ### router
 ````typescript
 import Error from './error';
@@ -134,7 +196,7 @@ all flags are optional
 
 -c --container:
 the root container to start from
-(!) currently only container that have a meta or call setHead explicitly can be used (ie search is not calling it)
+:warning: currently only container that have a meta or call setHead explicitly can be used (ie search is not calling it)
 (default root property from `PROJECT_ROOT/micro-frame.js`)
 
 -a --analyze:
