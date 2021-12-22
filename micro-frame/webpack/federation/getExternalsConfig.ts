@@ -60,7 +60,6 @@ const getExternalsMap = (externalsByChunkName: ContainerWebpackConfig["externals
   return JSON.stringify(externalsMap);
 }
 const getNodeExternalsMap = (externalsByChunkName: ContainerWebpackConfig["externalsByChunkName"], serverExternals: Record<string, Record<string, string>>) => {
-  console.log('### getNodeExternalsmap', externalsByChunkName)
   Object.entries(externalsByChunkName).forEach(([chunkName, externals]) => {
     if (!(chunkName in serverExternals)) {
       serverExternals[chunkName] = {};
@@ -136,6 +135,9 @@ const getBaseConfig = (env:ConfigEnvironment, options: ConfigOptions, config: Ex
   const { mode } = options;
 
   return {
+    cache: {
+      type: 'filesystem',
+    },
     inputFileSystem: new Union()
       .use(realFileSystem)
       .use(Volume.fromJSON(inputFS, path.join(cwd, base))),

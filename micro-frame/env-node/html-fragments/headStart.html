@@ -1,4 +1,5 @@
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
 <!--
   // TODO: favicon is done implicitly but also needs mobile manifest for icons (looks like a native app but in fact just adds a shortcut to a bookmark that has the icon(s))
   // TODO: add meta for viewport, maybe even in main micro-frame.js
@@ -29,12 +30,6 @@
   importExternal.register = (externalsByChunkName, container, externals) => {
     Object.assign(externalsMap, externalsByChunkName);
     __externals[container] = externals;
-
-    console.log('# register', externalsMap, __externals);
-    // Object.assign(
-    //   externalsMap[container] || (externalsMap[container] = {}),
-    //   externalsByChunkName
-    // );
   };
 
   window.importExternal = importExternal;

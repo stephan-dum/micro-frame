@@ -1,4 +1,5 @@
 import path from "path";
+import compression from 'compression';
 import express from 'express';
 import Logger from '@xxxs-shop/utils/logger';
 import ssrProxy from "./middleware/ssr-proxy";
@@ -9,6 +10,7 @@ const createServer = (config: ServerConfig) => {
   const publicDir = path.join(projectRoot, publicPath);
 
   const app = express()
+    .use(compression())
     .use(express.static(publicDir))
     .use(ssrProxy(config));
 

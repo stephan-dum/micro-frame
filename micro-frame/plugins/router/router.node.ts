@@ -6,19 +6,20 @@ import { RouterNode } from "./types";
 const router: NodeTypes<RouterNode> = async ({ routes }, context) => {
   const { route, remaining, params } = getRouteMatch(routes, context.url);
 
+  const { container, chunk, chunkName, node, aboveFold } = route;
+
   const subContext = {
     ...context,
     params,
+    aboveFold: aboveFold || context.aboveFold,
     url: remaining,
   };
-  const { container, chunk, chunkName, node } = route;
 
   if (node) {
     return createNode(node, subContext);
   }
 
   if(chunkName) {
-    context.setAssets(context.assetsByChunkName[chunkName]);
     return createNode((await chunk()).default, subContext);
   }
 

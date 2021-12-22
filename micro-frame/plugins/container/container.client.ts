@@ -4,7 +4,6 @@ import createNode from "../../env-core/createNode";
 
 const container: PnPNodeConstructor<ContainerNode> = async ({ name }, parentContext, isHyrate) => {
   const { entryByChunkName, assetsByChunkName, externalsByChunkName } = parentContext;
-  console.log('# client container parentContext', name, parentContext);
 
   // externals are only preloaded and must be injected which is part of hydration
   const assets = parentContext.externalsEntryByChunkName[name] || [];
@@ -27,7 +26,6 @@ const container: PnPNodeConstructor<ContainerNode> = async ({ name }, parentCont
   };
 
   const node = await createNode<PnPNode>(nodeFactory, childContext, isHyrate);
-  console.log('## client container node', node);
 
   return {
     navigate: (...args) => {

@@ -188,15 +188,11 @@ const copyContainerAssets = ({ container, assetsByChunkName, dist, base }: Conta
 type AggregateContainers = (env: ConfigEnvironment, options: ConfigOptions, config: AggregationConfig) => Promise<void>;
 const prepareTransform = (normalizedAssetsByChunkName: AssetRecords, config: ContainerWebpackConfig, toBase: string, stats: StatsCompilation) => {
   const { container, entryByChunkName, parentExternalsEntryByChunkName, entry } = config
-console.log('# buid', entryByChunkName);
+
   return Promise.all(Object.entries(entryByChunkName).map(([chunkName, chunk]) => {
     if (chunk.container !== container) {
       return;
     }
-
-    // if (isContainer) {
-    //   parentExternalsEntryByChunkName[container] = stats.entrypoints[container].assets.map(({ name }) => path.join('externals', name))
-    // }
 
     const isContainer = chunkName === entry;
     const transformer = isContainer ? transform : chunkTransform;

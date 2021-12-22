@@ -10,7 +10,7 @@ export type QueueResponse = (promise: Promise<QueueResponseTypes> | QueueRespons
 export interface IRenderContextSSR extends IRenderContext {
   queueResponse: QueueResponse;
   url: string;
-  setAssets: (assets?: string[]) => void;
+  setAssets: (assets?: string[], aboveFold?: boolean) => void;
   setHead: (node?: TemplateNode[], last?: boolean) => void;
   projectRoot: string;
   publicPath: string;

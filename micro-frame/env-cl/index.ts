@@ -5,7 +5,6 @@ import executeFederationBuild from "@micro-frame/webpack/federation";
 import createNode from "./utils/createNode";
 import { CLINodeContainer, CLIRenderContext, ContainerWebpackConfig, NeededExternals, PublicConfig } from "./types";
 import getContainerNode from "./nodes/getContainerNode";
-import * as path from "path";
 
 const getInitialContext = (overWrite: Partial<CLIRenderContext>) => ({
   params: {},
@@ -20,6 +19,7 @@ const getInitialContext = (overWrite: Partial<CLIRenderContext>) => ({
   externalsByPlugins: {},
   allParentExternals: {},
   provides: {},
+  aboveFold: false,
   ...overWrite
 }) as CLIRenderContext;
 
@@ -41,10 +41,7 @@ const federation = async (env: ConfigEnvironment, options: ConfigOptions, { cwd,
   const assetsByChunkName = {};
   const resolveByContainer = {};
   const webpackConfigs: ContainerWebpackConfig[] = [];
-  const entryByChunkName = {
-    root: ROOT,
-    // path: path.join(path.relative(path.join(base, '.dist/public'), __dirname), './root.js'),
-  };
+  const entryByChunkName = { root: ROOT };
   const initialContext = getInitialContext({
     resolveOptions,
     assetsByChunkName,
@@ -69,25 +66,6 @@ const federation = async (env: ConfigEnvironment, options: ConfigOptions, { cwd,
 
   const containerNode = getContainerNode({ node: structure, externals: {}, parentExternals: {}, externalsByPlugins: initialContext.externalsByPlugins, dist: structure.dist }, initialContext);
 
-  console.debug(initialContext);
-  console.debug(structure);
-
-  // const rootConfig = webpackConfigs.find((config) => config.container === root);
-  // Object.assign(rootConfig, {
-  //   externalsByChunkName: {
-  //     ...rootConfig.externalsByChunkName,
-  //     ...initialContext.externalsByChunkName,
-  //   },
-  //   assetsByChunkName: {
-  //     ...rootConfig.assetsByChunkName,
-  //     ...initialContext.assetsByChunkName,
-  //   },
-  //   entryByChunkName: {
-  //     ...rootConfig.entryByChunkName,
-  //     ...initialContext.entryByChunkName,
-  //   }
-  // });
-
   webpackConfigs.push({
     container: 'root',
     entry: 'root',
@@ -109,29 +87,8 @@ const federation = async (env: ConfigEnvironment, options: ConfigOptions, { cwd,
     },
     ...initialContext,
   });
-  await executeFederationBuild(env, options, { cwd, base, webpackConfigs, publicPath })
-  // try {
-  //   const externalsOptions = {
-  //     cwd,
-  //     base,
-  //     webpackConfigs,
-  //   };
-  //
-  //   const externalsStats = await webpackPromise(getExternalsConfig(env, options, externalsOptions));
-  //   const aggregationOptions = { stats: externalsStats, webpackConfigs, publicPath };
-  //   await aggregateContainers(env, options, aggregationOptions);
-  // } catch (error) {
-  //   console.log(error);
-  // }
 
-  // console.log(internalFS);
-  // const rootContent = [
-  //   getDecoratorTemplate(buildContext),
-  //   `export default ${JSON.stringify(node)};`
-  // ].join('');
-  //
-  // await mkdirp('.dist/private');
-  // fs.writeFileSync(path.join(cwd, '.dist/private/root.js'), rootContent);
+  await executeFederationBuild(env, options, { cwd, base, webpackConfigs, publicPath })
 
   return ROOT;
   // return rootConfig.entryByChunkName[rootConfig.container];

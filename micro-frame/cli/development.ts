@@ -3,10 +3,10 @@ import { Command } from 'commander';
 import globby from 'fast-glob';
 import webpack, { Configuration, MultiStats } from "webpack";
 import fse from 'fs-extra';
-const getDevServerConfig = require('@micro-frame/webpack/dev-server');
+// const getDevServerConfig = require('@micro-frame/webpack/dev-server');
 import { ConfigEnvironment, ConfigOptions } from "@micro-frame/webpack/types";
 import { MicroFrameContainerConfig, PackageJSON } from "@micro-frame/env-cl/types";
-import { MicroFrameConfig, MicroFramePlugin } from "./types";
+import { MicroFrameConfig } from "./types";
 import federation from "@micro-frame/env-cl";
 import createServer from "../env-node/create-server";
 
@@ -34,7 +34,6 @@ interface DevelopmentOptionValues {
 }
 
 const {
-  // inspect = false, TODO: should be added at the outside of the process when calling it with ts loader
   analyze = 'disabled',
   container = '',
   port = PORT,
@@ -55,12 +54,20 @@ const webpackPromise = (configs: Configuration[]): Promise<MultiStats> => new Pr
 const MICRO_CONFIG_GLOB = 'micro-frame.{ts,js}';
 const ROOT_GLOB = `./${MICRO_CONFIG_GLOB}`;
 const getContainerGlob = (container: string) => `**/${container}/${MICRO_CONFIG_GLOB}`;
+const SUB_CONTAINER_GlOB = `**/${MICRO_CONFIG_GLOB}`;
+
+const prepareContainerConfig = async (env: ConfigEnvironment, options: ConfigOptions, base: string, subPath: string) => {
+  const context = path.join(base, path.dirname(subPath));
+  const containerPackageJSON = await dynamicImport<PackageJSON>(context + '/package.json');
+  const { name: containerPackageName } = containerPackageJSON;
+
+  const { externals = [], entry, dist, name } = await dynamicImport<MicroFrameContainerConfig>(base + '/'+ subPath);
+
+  return getContainerConfig(env, options, { context, name, externals, entry, dist, containerPackageName });
+};
 
 const run = async () => {
   const globalConfig = await dynamicImport<MicroFrameConfig>(`${projectRoot}/micro-frame`);
-
-  const isRoot = !container || globalConfig.root.indexOf(container) >= 0
-  const glob = isRoot ? ROOT_GLOB : getContainerGlob(container);
 
   if ("staticPath" in globalConfig) {
     await fse.copy(globalConfig.staticPath, globalConfig.publicPath);
@@ -77,10 +84,13 @@ const run = async () => {
   const options: ConfigOptions = {
     // TODO: must be controlled in the individual callbacks
     // stats: "detailed",
-    mode: 'development',
+    mode: 'production',
+    // mode: 'development',
     // '--open'
   };
 
+  const isRoot = !container || globalConfig.root.indexOf(container) >= 0
+  const glob = isRoot ? ROOT_GLOB : getContainerGlob(container);
   const containerConfigPaths = await globby(glob, { cwd: globCWD });
 
   if(containerConfigPaths.length === 0) {
@@ -91,66 +101,30 @@ const run = async () => {
 
 
   const [containerConfigPath] = containerConfigPaths;
-  const context = path.join(globCWD, path.dirname(containerConfigPath));
-  const containerPackageJSON = await dynamicImport<PackageJSON>(context + '/package.json');
-  const { name: containerPackageName } = containerPackageJSON;
+  const subBase = path.join(globCWD, path.dirname(containerConfigPath));
+  const subContainerPaths = await globby(SUB_CONTAINER_GlOB, { cwd: subBase})
+  const subContainers = await Promise.all(subContainerPaths.map(
+    (subPath) => prepareContainerConfig(env, options, subBase, subPath)
+  ));
 
-  const { externals = [], entry, dist, name } = await dynamicImport<MicroFrameContainerConfig>(globCWD + '/'+ containerConfigPath);
-  const containerConfig = await getContainerConfig(env, options, { context, name, externals, entry, dist, containerPackageName });
-  const devConfig = getDevServerConfig(env, options);
+  const containerConfig = await prepareContainerConfig(env, options, globCWD, containerConfigPath);
+  const { name: containerPackageName, context } = containerConfig;
 
   const reactPluginConfigs = getReactPluginConfigs(env, options);
   const envBrowserConfig = getEnvBrowserConfig(env, options);
   const configs = [
-    devConfig,
+    // getDevServerConfig(env, options),
     envBrowserConfig,
       ...reactPluginConfigs,
     containerConfig,
+    ...subContainers,
   ];
 
   await webpackPromise(configs);
 
   const rootEntry = await federation(env, options, { cwd: projectRoot, base: context, root: containerPackageName, publicPath: globalConfig.publicPath });
 
-  // const privatePath = typeof dist === "object" && dist.private || globalConfig.privatePath;
-  // const statsFile = require(path.join(context, statsFilePath));
-  // const resolved = path.join(statsFile.publicPath, containerPackageName, statsFile.entryByChunkName[statsFile.entry]);
   await createServer({ ...globalConfig, projectRoot, root: context, container: containerPackageName, rootEntry });
 };
 
 run();
-
-//
-// const args = [
-//   'ts-webpack',
-//   // 'serve',
-//   // `-c ${require.resolve('../webpack/dev-server.js')}`,
-//   // `-c ${require.resolve('../env-browser/webpack.config.js')}`,
-//   // `-c ${require.resolve('../plugins/react/webpack.config.js')}`,
-//
-//   // `-c ${require.resolve('../env-node/webpack.config.js')}`,
-//   // `-c ${require.resolve('../../packages/containers/Application/webpack.config.js')}`,
-//   // `-c ${require.resolve('../../packages/containers/Checkout/webpack.config.js')}`,
-//   // `-c ${require.resolve('../../packages/containers/Webshop/webpack.config.js')}`,
-//   `-c ${searchConfig}`,
-//
-//   // `-c ${require.resolve('../../modules/Checkout/webpack.config.js')}`,
-//
-//   // // TODO: disable in dev-server and always use the same service worker
-//   // production && '-c=../webpack/service-worker.js',
-//   // analyze && '--env analyze',
-//   // `--env root=${process.cwd()}`,
-//   // `--env port=${PORT}`,
-//   // `--env rendering=${rendering}`,
-//   // "--stats-error-details",
-//   // `--mode=${production ? 'production' : 'development'}`,
-//   // '--mode=production',
-//   // '--open'
-// ].filter(Boolean).join(' ').split(' ');
-//
-// try {
-//   spawn('yarn', args, { stdio: 'inherit', cwd: __dirname });
-// } catch (e) {
-//   console.log(e);
-// }
-

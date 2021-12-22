@@ -4,11 +4,6 @@ import {IRouteProps, RouterNode} from "./types";
 import getUnionNode from "@micro-frame/env-cl/nodes/getUnionNode";
 import createNode from "@micro-frame/env-cl/utils/createNode";
 import {MicroNode} from "@micro-frame/core/types";
-// import getChunkNode from "@micro-frame/env-cl/nodes/getChunkNode";
-// import getSyncNode from "../../env-cl/nodes/getSyncNode";
-// import * as console from "console";
-// import externalsToAssets from "../../env-cl/utils/externalsToAssets";
-// import mergeExternals from "../../env-cl/utils/mergeExternals";
 
 export type RouterFactory = NodeTypesCL<RouterNode>;
 

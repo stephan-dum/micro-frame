@@ -10,6 +10,7 @@ export interface IRenderContext {
   // url: string;
   // loadModule: LoadModule;
   // services: Record<string, Service>;
+  aboveFold: boolean;
   load: <T = any>(id: string) => Promise<T | { default: T}>;
   props: Record<string, any>;
   levelId: string;

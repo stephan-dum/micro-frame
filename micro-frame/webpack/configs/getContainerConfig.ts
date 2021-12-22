@@ -65,6 +65,8 @@ const getContainerConfig = async (env: ConfigEnvironment, options: ConfigOptions
         {
           container: containerPackageName,
           externals,
+          cacheCompression: false,
+          cacheDirectory: true,
         }
       ]
     ]
@@ -72,7 +74,10 @@ const getContainerConfig = async (env: ConfigEnvironment, options: ConfigOptions
 
   return {
     mode,
-    name: `${name}_${mode}`,
+    cache: {
+      type: 'filesystem',
+    },
+    name: containerPackageName,
     context,
     target: 'es2020',
     entry: {
@@ -110,7 +115,7 @@ const getContainerConfig = async (env: ConfigEnvironment, options: ConfigOptions
         // TODO: resolve to privateDist
         filename: "../private/stats.json",
         fields: ["assetsByChunkName", "entrypoints"],
-        transform: ({ assetsByChunkName, entrypoints }: StatsCompilation) => {
+        transform: ({ assetsByChunkName, entrypoints, hash }: StatsCompilation) => {
           const entry = Object.keys(entrypoints)[0];
 
 
@@ -133,6 +138,7 @@ const getContainerConfig = async (env: ConfigEnvironment, options: ConfigOptions
           return JSON.stringify({
             publicPath: publicDist,
             base: context,
+            hash,
             // root: path.join(publicDist, entryByChunkName[entry]).replace(/\\/g, '/'),
             // root: path.join(publicDist, entryFile).replace(/\\/g, '/'),
             assetsByChunkName,

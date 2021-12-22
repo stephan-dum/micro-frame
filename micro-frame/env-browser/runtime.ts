@@ -49,10 +49,7 @@ interface ActiveAsset {
 }
 const activeAssets: Record<string, ActiveAsset> = {};
 const init: Init = async (rootPath, rootContainer, plugins = [], virtualNode= document.body) => {
-  const load = (path: string) => {
-    console.log('## load', path);
-    return window.esImport('/' + path)
-  };
+  const load = (path: string) => window.esImport('/' + path);
 
   const context = {
     virtual: getInsertVirtual(virtualNode),
@@ -60,6 +57,7 @@ const init: Init = async (rootPath, rootContainer, plugins = [], virtualNode= do
     levelId: '0',
     containerName: rootContainer,
     provides: {},
+    aboveFold: false,
     removeAssets: (assets: string[]) => {
       assets.forEach((rawAsset) => {
         const asset = activeAssets[rawAsset];

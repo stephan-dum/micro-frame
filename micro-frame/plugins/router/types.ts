@@ -8,6 +8,7 @@ export interface IRouteProps {
   chunkName: string;
   chunk?: ILoadable<StreamNode>;
   node?: StreamNode;
+  aboveFold?: boolean;
   container?: string;
   externals?: RawExternalModule[];
 }

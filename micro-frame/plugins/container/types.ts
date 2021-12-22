@@ -4,6 +4,7 @@ export interface ContainerNode {
   type: 'container';
   parentExternals?: ExternalRecords;
   name: string;
+  aboveFold?: boolean;
   base?: string;
 }
 

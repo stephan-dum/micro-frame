@@ -4234,6 +4234,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
             ["@micro-frame/utils-create-element", "workspace:micro-frame/utils/create-element"],
             ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
+            ["@types/compression", "npm:1.7.2"],
             ["@types/cross-spawn", "npm:6.0.2"],
             ["@types/express", "npm:4.17.13"],
             ["@types/node", "npm:16.11.4"],
@@ -4242,6 +4243,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@xxxs-shop/dev-configs", "workspace:packages/dev-configs"],
             ["@xxxs-shop/utils", "workspace:packages/utils"],
             ["commander", "npm:8.3.0"],
+            ["compression", "npm:1.7.4"],
             ["cross-spawn", "npm:7.0.3"],
             ["express", "npm:4.17.1"],
             ["react", "npm:17.0.2"],
@@ -4572,6 +4574,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/body-parser", "npm:1.19.1"],
             ["@types/connect", "npm:3.4.35"],
             ["@types/node", "npm:16.11.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/compression", [
+        ["npm:1.7.2", {
+          "packageLocation": "./.yarn/cache/@types-compression-npm-1.7.2-7e2a93668a-3457f9d39e.zip/node_modules/@types/compression/",
+          "packageDependencies": [
+            ["@types/compression", "npm:1.7.2"],
+            ["@types/express", "npm:4.17.13"]
           ],
           "linkType": "HARD",
         }]

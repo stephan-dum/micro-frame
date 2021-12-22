@@ -49,7 +49,6 @@ const ssrProxy: SSRProxy = (config) => {
 
   const externalsMap = require(path.join(projectRoot, privatePath, 'externals/index.js')).default;
   global.importExternal = (container: string, url: string) => {
-    console.log('nodeImport', container, url, externalsMap);
     const module = require(externalsMap[container][url]);
     return module.default || module;
   };
@@ -59,6 +58,7 @@ const ssrProxy: SSRProxy = (config) => {
   const clientPlugins = createPlugins(plugins, publicPath, resolveOptions);
   const microFrameClient = require.resolve('@micro-frame/browser/.dist/micro-frame.js');
   const fragmentHeadStart = path.join(__dirname, '../html-fragments/headStart.html');
+  const publicBase = path.join(projectRoot, publicPath);
 
   return async (request, response) => {
     const lang = 'de';
@@ -89,7 +89,7 @@ const ssrProxy: SSRProxy = (config) => {
       .then(() => send(`<script>microFrame("${rootEntry.container}/${rootEntry.path}", "${container}", ${JSON.stringify(clientPlugins)});</script>`));
 
     const load = (id: string) => {
-      return require(path.join(projectRoot, publicPath, id));
+      return require(path.join(publicBase, id));
     }
 
     const context: IRenderContextSSR = {
@@ -98,14 +98,21 @@ const ssrProxy: SSRProxy = (config) => {
       chunkName: 'root',
       provides: {},
       params: {},
+      aboveFold: false,
       projectRoot,
-      publicPath: path.join(projectRoot, publicPath),
+      publicPath: publicBase,
       queueResponse: (promise) => {
         currentPromise = currentPromise.then(() => promise).then(send);
       },
       url: request.url,
-      setAssets: async (assets = []) => {
-        await send(assets.map((asset) => createAsset(asset)).join(''));
+      setAssets: (assets = [], aboveFold = false) => {
+        return assets.map(
+          (asset) => createAsset(asset, aboveFold, publicBase)
+        )
+          .flat().reduce(
+            (currentPromise, value) => currentPromise.then(() => send(value)),
+            Promise.resolve(),
+          )
       },
       setHead: async (meta = [], last = true) => {
         await send(meta.map((child) => createElement(child, context)).join(''));

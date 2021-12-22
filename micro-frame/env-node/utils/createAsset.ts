@@ -1,19 +1,20 @@
 import path from "path";
-import {TemplateNode} from "@micro-frame/utils-create-element/types";
+import { createReadStream } from 'fs';
+import { Readable } from 'stream';
 
-const assetFactories: Record<string, (asset: string) => TemplateNode> = {
-  css: (href) => `<link rel="stylesheet" href="/${href}"/>`,
-  // TODO: fix file extension back to async
-  // js: (src) => `<script type="module" src="${src}"></script>`,
-  // js: (src) => `<script async src="${src}"></script>`,
+const assetFactories: Record<string, (asset: string, aboveFold?: boolean, base?: string) => string | Readable | Array<string | Readable>> = {
+  css: (href, aboveFold, base) => {
+    if (aboveFold) {
+      return [`<style>`, createReadStream(path.join(base, href)), `</style>`];
+    }
+    return `<link rel="stylesheet" href="/${href}"/>`;
+  },
   js: (href) => `<link rel="preload" as="script" href="/${href}" />`,
-  // mjs: (src) => `<script type="module" src="${src}"></script>`
   mjs: (href) => `<link rel="modulepreload " href="/${href.replace(/\.mjs$/, '.js')}" />`,
-
   jsm: (href) => assetFactories.mjs(href.replace(/\.jsm$/, '.mjs')),
 };
 
-const createAsset = (asset: string) => {
+const createAsset = (asset: string, aboveFold = false, base = '') => {
   const ext = path.extname(asset).slice(1);
   const factory = assetFactories[ext];
 
@@ -22,7 +23,7 @@ const createAsset = (asset: string) => {
 
   }
 
-  return factory(asset);
+  return factory(asset, aboveFold, base);
 }
 
 export default createAsset;

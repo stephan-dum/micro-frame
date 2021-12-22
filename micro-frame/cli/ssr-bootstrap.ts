@@ -2,7 +2,6 @@ import spawn from 'cross-spawn';
 import { Command } from 'commander';
 import { MicroFrameConfig } from "./types";
 import path from "path";
-import * as console from "console";
 
 const program = new Command()
   .option('-c, --config <config>', 'root config object')

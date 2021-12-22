@@ -15,7 +15,6 @@ const addFormListener = (root: PnPNode) => {
     event.preventDefault();
 
     const { pathname, hash, search } = new URL(action);
-    console.log('## form submit', pathname, hash, search);
     root.navigate({ pathname, hash, search }).then(() => {
       history.pushState(state, document.title, pathname + search + search);
     });

@@ -15,18 +15,7 @@ const chunk: PnPNodeConstructor<ChunkNode> = async ({ chunkName, chunk: chunkFac
 
   const chunk = await chunkFactory().then((mod) => 'default' in mod ? mod.default : mod);
 
-  // const {
-  //   default: nodeFactory,
-  // } = await parentContext.load(parentContext.containerName + entryByChunkName[chunkName].slice(1));
-
-  // const childContext = {
-  //   ...parentContext,
-  //   ...subContext
-  // };
-
-  // const node = nodeFactory(parentContext, isHyrate);
-  const node = await createNode<PnPNode>(chunk, parentContext, isHyrate)
-  console.log('## chunkNode', node);
+  const node = await createNode<PnPNode>(chunk, parentContext, isHyrate);
 
   return {
     navigate: (...args) => {
