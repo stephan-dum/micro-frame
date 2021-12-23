@@ -27,6 +27,7 @@ A framework for modular universal federation build with ssr streaming and micro 
   - bundle analyzer display stats from files
 
 [https://module-federation.github.io/](https://module-federation.github.io/)
+
 [https://github.com/module-federation/module-federation-examples](https://github.com/module-federation/module-federation-examples)
 
 ### yarn plug and play (PnP)
@@ -37,30 +38,57 @@ set of best practice for modularization defined by yarn (facebook).
 - [migration path](https://yarnpkg.com/getting-started/migration)
 
 resolves dependencies while installation and creates a mapping saved to `.pnp.cjs` file.
-It is injected at runtime, which means that you must always use yarn or dependencies will not be injected.
-ie (yarn node ./index.js vs node ./index.js)
+
+It is injected at runtime, which means that you must always use yarn or dependencies will not be injected. (ie `yarn node ./index.js` vs `node ./index.js`)
 to avoid this put them into package.json scripts as they will be auto prefixed there
+
 also avoid relative paths: if you want to use a package it must be in package.json, even it's in the same mono repository
 
 require.resolve should be used instead of path.*
 `require.resolve(dependencyName, { paths: [PROJECT_DIR, parentPackageDir] });` 
 
-- workspaces
-  - used for mono repository indicate sub packages 
-  - offers utilities ie `workspaces-each [command]` 
-  - prefers local packages if the versions match
-    => no need for link, lerna, yalc... anymore
-- .pnp.cjs file
-  - package manager should resolve all dependencies and provide a mapping
-  - comparable to ./dist/private/externals/index.js
-  - injected at runtime to avoid resolves from filesystem
-  - can be split with workspaces 
+**workspaces**
+- used for mono repository indicate sub packages 
+- offers utilities ie `workspaces-each [command]` 
+- prefers local packages if the versions match
+  => no need for link, lerna, yalc... anymore
+**.pnp.cjs file**
+- package manager should resolve all dependencies and provide a mapping
+- comparable to ./dist/private/externals/index.js
+- injected at runtime to avoid resolves from filesystem
+- can be split with workspaces 
   
 
 ## micro nodes
 must always contain a type property
-be a function or a plain object
+can be a plain object or a function that receives the current render context
 
+general config is in the root folder `micro-frame.[jt]s` files.
+````typescript
+export interface MicroFrameConfig {
+  plugins: MicroFramePlugin[];
+  port: number;
+  root: string;
+  publicPath: string;
+  privatePath: string;
+  staticPath: string;
+}
+````
+Each container needs to define one a `micro-frame.[jt]s` file currently.
+This is used by webpack/getContainerConfig.ts
+````typescript
+export interface MicroFrameContainerConfig {
+  name: string;
+  dist?:string | { public?: string, private?: string; };
+  tsConfig?: string;
+  provides?: RawProvide;
+  injects?: RawInject[];
+  entry?: string;
+  externals?: RawExternalModule[];
+  services?: string[];
+  statsFile?: string;
+}
+````
 ### chunk
 the inner async parts of a container
 needs a chunkName to match assetsByChunkName from webpack stats file within the container
