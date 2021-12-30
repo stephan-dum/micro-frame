@@ -2,7 +2,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
 <!--
   // TODO: favicon is done implicitly but also needs mobile manifest for icons (looks like a native app but in fact just adds a shortcut to a bookmark that has the icon(s))
-  // TODO: add meta for viewport, maybe even in main micro-frame.js
 -->
 <script>
   // TODO: parts of the file need a dedicated build or at lest types
@@ -10,6 +9,7 @@
   var esImport = (id) => import(id);
   window.esImport = esImport;
 
+  // TODO: move rest to env-browser runtime
   var __externals = {};
   const externalsMap = {};
 
@@ -22,6 +22,7 @@
     if (!(packageName in containerExternals)) {
       throw new ReferenceError(`Could not find ${packageName}, in ${container} dependencies!`)
     }
+
     const [resolvedContainer, versionedPackageName] = containerExternals[packageName];
 
     return __externals[resolvedContainer][versionedPackageName];

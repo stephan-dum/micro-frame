@@ -3,7 +3,7 @@ import { RawExternalModule } from "../../env-cl/types";
 import { StatsCompilation } from "webpack";
 
 import path from "path";
-import normalizeExternal from '@micro-frame/env-cl/utils/normalizeExternal';
+import normalizeExternal from '@micro-frame/env-build/utils/normalizeExternal';
 
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const getResolve = require("../getResolve");
@@ -14,7 +14,9 @@ const getExtractCSSChunksPlugin = require("../plugins/getExtractCSSChunksPlugin"
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 type DistOption = string | { publicDist: string; privateDist: string};
-
+const START_PORT = 8880;
+let portNumber = START_PORT;
+const getAnalyzerPort = () => ++portNumber;
 const normalizeDist = (dist: DistOption) => {
   switch (typeof dist) {
     case "string":
@@ -25,7 +27,13 @@ const normalizeDist = (dist: DistOption) => {
       return { publicDist: '.dist/public', privateDist: '.dist/private' };
   }
 }
-const getExternals = (externals: RawExternalModule[]) => externals.map((external) => normalizeExternal(external).name);
+const getExternals = (externals: RawExternalModule[]) => externals.map((external) => {
+  const { paths = ['./'], name } = normalizeExternal(external);
+
+  return paths.map(
+    (subPath) => path.join(name, subPath).replace(/\\/g, '/').replace(/\/$/, '')
+  );
+}).flat();
 
 const allowedExtensions = ['.js', '.mjs'];
 
@@ -110,7 +118,7 @@ const getContainerConfig = async (env: ConfigEnvironment, options: ConfigOptions
       }
     },
     plugins: [
-      new BundleAnalyzerPlugin({ analyzerMode: analyze, analyzerPort: 8888 }),
+      new BundleAnalyzerPlugin({ analyzerMode: analyze, analyzerPort: getAnalyzerPort() }),
       new StatsWriterPlugin({
         // TODO: resolve to privateDist
         filename: "../private/stats.json",

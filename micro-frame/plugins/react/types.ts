@@ -1,7 +1,7 @@
 // import { ComponentType } from 'react';
 import { IRenderContext } from "@micro-frame/core/types";
 import { TemplateNode } from "@micro-frame/utils-create-element/types";
-import {RawExternalModule, NodeTypesCL} from "@micro-frame/env-cl/types";
+import {RawExternalModule, NodeTypesCL} from "@micro-frame/env-build/types";
 
 export type ReactFactoryCL = NodeTypesCL<ReactNode>;
 

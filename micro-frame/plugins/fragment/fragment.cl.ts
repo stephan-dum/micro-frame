@@ -1,8 +1,8 @@
 import semverIntersects from 'semver/ranges/intersects';
 
-import { CLINodeResult } from "@micro-frame/env-cl/types";
-import createExternals from "@micro-frame/env-cl/utils/createExternals";
-import createNode from "@micro-frame/env-cl/utils/createNode";
+import { CLINodeResult } from "@micro-frame/env-build/types";
+import createExternals from "@micro-frame/env-build/utils/createExternals";
+import createNode from "@micro-frame/env-build/utils/createNode";
 import {FragmentFactoryCL} from "./types";
 import getIntersectNode from "../../env-cl/nodes/getIntersectNode";
 import mergeExternals from "../../env-cl/utils/mergeExternals";

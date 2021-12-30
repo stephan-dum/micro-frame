@@ -21,8 +21,13 @@ const Webshop = {
       type: 'router',
       routes: [
         {
+          path: /^\//,
+          container: '@xxxs-shop/home',
+        },
+        {
           path: /search/i,
           container: '@xxxs-shop/search',
+          aboveFold: true,
         },
         {
           node: {

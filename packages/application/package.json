@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@micro-frame/core": "1.0.0",
-    "@micro-frame/env-cl": "1.0.0",
+    "@micro-frame/env-build": "1.0.0",
     "@micro-frame/webpack": "1.0.0",
     "@types/react": "^17.0.27",
     "@xxxs-shop/dev-configs": "1.0.0",

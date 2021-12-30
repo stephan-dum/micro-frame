@@ -19,7 +19,7 @@
     "@babel/preset-typescript": "^7.16.0",
     "@babel/template": "^7.16.0",
     "@babel/types": "^7.16.0",
-    "@micro-frame/env-cl": "1.0.0",
+    "@micro-frame/env-build": "1.0.0",
     "assets-webpack-plugin": "^7.1.1",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^9.1.0",

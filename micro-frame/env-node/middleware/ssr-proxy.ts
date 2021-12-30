@@ -24,6 +24,7 @@ const HEAD_TIMEOUT = 30 * 1000;
 
 const createPlugins = (plugins: MicroFramePlugin[], publicPath: string, resolveOptions: ResolveOptions): ClientPlugin[] => plugins.map((plugin) => {
   const pkg = require(require.resolve(plugin.node_module+'/package.json', resolveOptions));
+
   nodes[plugin.type] = require(require.resolve(path.join(plugin.node_module, pkg.main), resolveOptions)).default;
   const clientPluginSrc = require.resolve(path.join(plugin.node_module, pkg.browser || pkg.main), resolveOptions);
   const baseName = 'mf_plugin_'+path.basename(clientPluginSrc);
@@ -50,7 +51,9 @@ const ssrProxy: SSRProxy = (config) => {
   const externalsMap = require(path.join(projectRoot, privatePath, 'externals/index.js')).default;
   global.importExternal = (container: string, url: string) => {
     const module = require(externalsMap[container][url]);
+    // TODO: this is currently different in browser
     return module.default || module;
+    // return module;
   };
 
   const rootNode = require(path.join(projectRoot, '.dist/public', rootEntry.container , rootEntry.path)).default;

@@ -2,12 +2,7 @@
   "name": "@xxxs-shop/root",
   "packageManager": "yarn@3.1.0",
   "workspaces": [
-    "./packages/application",
-    "./packages/react-hooks",
-    "./packages/services",
-    "./packages/dev-configs",
-    "./packages/utils",
-    "./packages/webpack",
+    "./packages/*",
     "./micro-frame/*",
     "./micro-frame/plugins/*",
     "./micro-frame/utils/*"
@@ -21,6 +16,7 @@
   "author": "Stephan Dum",
   "license": "ISC",
   "dependencies": {
+    "@micro-frame/plugin-preact": "1.0.0",
     "@micro-frame/plugin-react": "1.0.0",
     "@xxxs-shop/application": "1.0.0",
     "react": "^17.0.2"

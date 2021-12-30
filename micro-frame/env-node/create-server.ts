@@ -10,7 +10,6 @@ const createServer = (config: ServerConfig) => {
   const publicDir = path.join(projectRoot, publicPath);
 
   const app = express()
-    .use(compression())
     .use(express.static(publicDir))
     .use(ssrProxy(config));
 

@@ -5,7 +5,7 @@ import { Volume } from 'memfs';
 const { Union } = require('unionfs');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-import { ContainerWebpackConfig, ExternalRecords, InternalFS, NeededExternals } from "@micro-frame/env-cl/types";
+import { ContainerWebpackConfig, ExternalRecords, InternalFS, NeededExternals } from "@micro-frame/env-build/types";
 
 import { ConfigEnvironment, ConfigOptions } from "../types";
 import { ExternalsByChunkName } from "../../env-core/types";
@@ -49,11 +49,16 @@ const getExternalsMap = (externalsByChunkName: ContainerWebpackConfig["externals
   Object.entries(externalsByChunkName).forEach(([chunkName, externals]) => {
     externalsMap[chunkName] = {};
     Object.entries(externals).forEach(([externalName, external]) => {
-      if (external.exports.default) {
-        externalsMap[chunkName][externalName] = [
-          getVersionName(external.container),
-          getVersionName(externalName, external.version)
-        ];
+      const { exports, paths = ['./'], version } = external;
+      const { default: browser } = exports;
+
+      if (browser) {
+        paths.forEach((subPath) => {
+          externalsMap[chunkName][externalName] = [
+            external.container,
+            getVersionName(externalName + subPath, version)
+          ];
+        });
       }
     });
   });
@@ -68,10 +73,15 @@ const getNodeExternalsMap = (externalsByChunkName: ContainerWebpackConfig["exter
     Object.entries(externals).forEach(([externalName, external]) => {
       // TODO: merge or overwrite externals from different usages!?
       if (!(externalName in externalsMap)) {
-        const { default: fallback, node = fallback } = external.exports;
+        const { paths = ['./'], base, exports } = external;
+        const { default: fallback, node = fallback } = exports;
 
         if (node) {
-          externalsMap[path.join(externalName, node.path).replace(/\\/g, '/')] = path.join(external.base, node.path);
+          paths.forEach((subPath) => {
+            const versionedName = path.join(externalName, subPath, node.path).replace(/\\/g, '/').replace(/\/$/, '');
+            externalsMap[versionedName] = path.join(base, subPath, node.path).replace(/\\/g, '\\\\');
+          });
+          // externalsMap[path.join(externalName, node.path).replace(/\\/g, '/')] = path.join(external.base, node.path);
         } else {
           externalsMap[externalName] = external.resolve;
         }
@@ -87,13 +97,17 @@ const createExternalFile = (externals: ExternalRecords, parentExternals: Externa
 
   Object.entries(externals).forEach(
     ([name, versions]) => Array.from(versions.values()).forEach(
-      ({exports, version, base}) => {
+      ({exports, version, paths = ['./'], base}) => {
         const {default: browser} = exports;
 
         if (browser) {
-          const versionedName = getVersionName(name, version);
-          imports.push(`import { default as ${versionedName} } from '${path.join(base, browser.path).replace(/\\/g, '\\\\')}';`);
-          exportsMap.push(`${getVersionName(name, version)}`);
+          paths.forEach((subPath) => {
+            // const realName = path.join(name, subPath).replace(/\\/g, '/').replace(/\/$/, '')
+            const versionedName = getVersionName(name + subPath, version);
+            // console.log('## imported from', browser, paths, path.join(base, subPath).replace(/\\/g, '\\\\'));
+            imports.push(`import * as ${versionedName} from '${path.join(base, subPath).replace(/\\/g, '\\\\')}';`);
+            exportsMap.push(`${versionedName}: ${versionedName}.default || ${versionedName}`);
+          })
         }
       })
   );

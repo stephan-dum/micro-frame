@@ -62,6 +62,7 @@ export interface ExternalObject {
   type: string;
   name: string;
   exports?: RawPackageExports;
+  paths?: string[];
 }
 interface RawExternalObjectUMD extends ExternalObject {
   type: 'umd';

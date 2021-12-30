@@ -5,12 +5,13 @@ import webpack, { Configuration, MultiStats } from "webpack";
 import fse from 'fs-extra';
 // const getDevServerConfig = require('@micro-frame/webpack/dev-server');
 import { ConfigEnvironment, ConfigOptions } from "@micro-frame/webpack/types";
-import { MicroFrameContainerConfig, PackageJSON } from "@micro-frame/env-cl/types";
+import { MicroFrameContainerConfig, PackageJSON } from "@micro-frame/env-build/types";
 import { MicroFrameConfig } from "./types";
-import federation from "@micro-frame/env-cl";
+import federation from "@micro-frame/env-build";
 import createServer from "../env-node/create-server";
 
 const getReactPluginConfigs = require('../plugins/react/webpack.config.js');
+const getPreactPluginConfigs = require('../plugins/preact/webpack.config.js');
 const getEnvBrowserConfig = require('../env-browser/webpack.config.js');
 const getContainerConfig = require('@micro-frame/webpack/configs/getContainerConfig');
 
@@ -84,8 +85,8 @@ const run = async () => {
   const options: ConfigOptions = {
     // TODO: must be controlled in the individual callbacks
     // stats: "detailed",
-    mode: 'production',
-    // mode: 'development',
+    // mode: 'production',
+    mode: 'development',
     // '--open'
   };
 
@@ -99,10 +100,10 @@ const run = async () => {
     console.warn(`Multiple root entries possible with pattern ${container}, picking first!`)
   }
 
-
   const [containerConfigPath] = containerConfigPaths;
-  const subBase = path.join(globCWD, path.dirname(containerConfigPath));
+  const subBase = path.join(globCWD, path.dirname(containerConfigPath), 'containers');
   const subContainerPaths = await globby(SUB_CONTAINER_GlOB, { cwd: subBase})
+
   const subContainers = await Promise.all(subContainerPaths.map(
     (subPath) => prepareContainerConfig(env, options, subBase, subPath)
   ));
@@ -111,11 +112,13 @@ const run = async () => {
   const { name: containerPackageName, context } = containerConfig;
 
   const reactPluginConfigs = getReactPluginConfigs(env, options);
+  const preactPluginConfigs = getPreactPluginConfigs(env, options);
   const envBrowserConfig = getEnvBrowserConfig(env, options);
   const configs = [
     // getDevServerConfig(env, options),
     envBrowserConfig,
-      ...reactPluginConfigs,
+    ...reactPluginConfigs,
+    ...preactPluginConfigs,
     containerConfig,
     ...subContainers,
   ];

@@ -1,7 +1,7 @@
-import getSyncNode from "@micro-frame/env-cl/nodes/getSyncNode";
+import getSyncNode from "@micro-frame/env-build/nodes/getSyncNode";
 import { ReactFactoryCL } from "./types";
 
-const react: ReactFactoryCL = getSyncNode;
+const react: ReactFactoryCL = (...args) => getSyncNode(...args);
 
 react.externals = [
   "react",

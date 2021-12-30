@@ -4,7 +4,7 @@ import {
   AssetRecords,
   ContainerWebpackConfig,
   NeededExternals, NormalizedInject, NormalizedProvide,
-} from "@micro-frame/env-cl/types";
+} from "@micro-frame/env-build/types";
 
 import path from "path";
 import { ConfigEnvironment, ConfigOptions } from "../types";

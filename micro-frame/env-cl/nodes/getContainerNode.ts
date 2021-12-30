@@ -1,4 +1,4 @@
-import {CLINodeContainer, CLINodeResult, CLIRenderContext, RawExternalModule, ExternalRecords} from "../types";
+import {CLINodeContainer, CLINodeResult, CLIRenderContext, ExternalRecords} from "../types";
 import {mergeChunkExternals} from "./getChunkNode";
 
 interface GetContainerNodeOptions {

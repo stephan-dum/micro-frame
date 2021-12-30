@@ -1,4 +1,4 @@
-import { MicroFrameContainerConfig } from "@micro-frame/env-cl/types";
+import { MicroFrameContainerConfig } from "@micro-frame/env-build/types";
 
 const config: MicroFrameContainerConfig = {
   name: 'webshop',

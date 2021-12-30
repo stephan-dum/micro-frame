@@ -1,8 +1,14 @@
 ## road map
 - styles for externals
 - refactor and clean up
+- externals have assets
+- merge containers with something like getUnionNode
+- docker
+  - nginX + varnish instead of apache
+  - global tls cert for predefine local host
 - HMR
-- testing all pages should stay at 100% ;)
+- linting
+- testing all pages should stay at 100/100
 - logger service to the context of each level as (error)
 - currently, a container can only have one set of dependencies
   this is not always true because a parent dependency could be different

@@ -3,7 +3,6 @@ import {
   CLINodeResult,
   CLIRenderContext,
   RawExternalModule,
-  ExternalObject,
   ExternalRecords,
   NormalizedExternal
 } from "../types";
@@ -38,7 +37,6 @@ export const mergeChunkExternals = (context: CLIRenderContext, chunkExternals: E
   Object.keys(node.externals).forEach((key) => {
     delete node.externals[key];
   })
-
 
   updateAllMergedExternals(chunkExternals, context.containerName);
 

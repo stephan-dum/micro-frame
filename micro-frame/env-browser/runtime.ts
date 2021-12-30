@@ -97,6 +97,7 @@ const init: Init = async (rootPath, rootContainer, plugins = [], virtualNode= do
     load,
   };
 
+  // TODO: can be removed when externals are used instead
   plugins.forEach(({ lazy, src, type }) => {
     if (lazy) {
       defaultPlugins[type] = async (...args: any[]) => (await load(src)).default(...args);
@@ -113,6 +114,7 @@ const init: Init = async (rootPath, rootContainer, plugins = [], virtualNode= do
   // };
   const root = await createNode<PnPNode>(rootNode, context, true);
 
+  // TODO: this should be part of a service
   addAnchorListener(root);
   addFormListener(root);
 }

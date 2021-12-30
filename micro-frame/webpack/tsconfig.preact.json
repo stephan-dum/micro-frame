@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "Preact.createElement",
+    "jsxFragmentFactory": "Preact.Fragment",
+    "allowUmdGlobalAccess": true
+  }
+}

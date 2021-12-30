@@ -1,19 +1,21 @@
 {
-  "name": "@micro-frame/plugin-container",
-  "packageManager": "yarn@3.1.0",
   "version": "1.0.0",
-  "main": "container.node.ts",
-  "browser": "container.client.ts",
+  "name": "@micro-frame/plugin-preact",
+  "packageManager": "yarn@3.0.2",
+  "main": ".dist/preact-node.js",
+  "browser": ".dist/preact-client.js",
   "dependencies": {
     "@micro-frame/core": "1.0.0",
     "@micro-frame/env-build": "1.0.0",
     "@micro-frame/utils-create-element": "1.0.0",
-    "@micro-frame/utils-create-wrapper": "1.0.0"
+    "@micro-frame/utils-create-wrapper": "1.0.0",
+    "preact": ">=10",
+    "preact-render-to-string": "^5.1.19"
   },
   "devDependencies": {
     "@micro-frame/browser": "1.0.0",
     "@micro-frame/node": "1.0.0",
-    "@types/node": "^16.11.7",
+    "@micro-frame/webpack": "1.0.0",
     "@xxxs-shop/dev-configs": "1.0.0"
   }
 }

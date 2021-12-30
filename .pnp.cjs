@@ -31,7 +31,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:micro-frame/env-browser"
       },
       {
-        "name": "@micro-frame/env-cl",
+        "name": "@micro-frame/env-build",
         "reference": "workspace:micro-frame/env-cl"
       },
       {
@@ -63,6 +63,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:micro-frame/plugins/fragment"
       },
       {
+        "name": "@micro-frame/plugin-preact",
+        "reference": "workspace:micro-frame/plugins/preact"
+      },
+      {
         "name": "@micro-frame/plugin-react",
         "reference": "workspace:micro-frame/plugins/react"
       },
@@ -89,6 +93,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       {
         "name": "@xxxs-shop/application",
         "reference": "workspace:packages/application"
+      },
+      {
+        "name": "@xxxs-shop/backend",
+        "reference": "workspace:packages/backend"
       },
       {
         "name": "@xxxs-shop/dev-configs",
@@ -177,13 +185,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@micro-frame/browser", ["workspace:micro-frame/env-browser"]],
       ["@micro-frame/cli", ["workspace:micro-frame/cli"]],
       ["@micro-frame/core", ["workspace:micro-frame/env-core"]],
-      ["@micro-frame/env-cl", ["workspace:micro-frame/env-cl"]],
+      ["@micro-frame/env-build", ["workspace:micro-frame/env-cl"]],
       ["@micro-frame/node", ["workspace:micro-frame/env-node"]],
       ["@micro-frame/plugin-chunk", ["workspace:micro-frame/plugins/chunk"]],
       ["@micro-frame/plugin-container", ["workspace:micro-frame/plugins/container"]],
       ["@micro-frame/plugin-fetch", ["workspace:micro-frame/plugins/fetch"]],
       ["@micro-frame/plugin-file", ["workspace:micro-frame/plugins/file"]],
       ["@micro-frame/plugin-fragment", ["workspace:micro-frame/plugins/fragment"]],
+      ["@micro-frame/plugin-preact", ["workspace:micro-frame/plugins/preact"]],
       ["@micro-frame/plugin-react", ["workspace:micro-frame/plugins/react"]],
       ["@micro-frame/plugin-router", ["workspace:micro-frame/plugins/router"]],
       ["@micro-frame/service", ["workspace:micro-frame/service"]],
@@ -191,6 +200,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@micro-frame/utils-create-wrapper", ["workspace:micro-frame/utils/create-wrapper"]],
       ["@micro-frame/webpack", ["workspace:micro-frame/webpack"]],
       ["@xxxs-shop/application", ["workspace:packages/application"]],
+      ["@xxxs-shop/backend", ["workspace:packages/backend"]],
       ["@xxxs-shop/category", ["workspace:packages/application/containers/webshop/containers/category"]],
       ["@xxxs-shop/checkout", ["workspace:packages/application/containers/checkout"]],
       ["@xxxs-shop/dev-configs", ["workspace:packages/dev-configs"]],
@@ -222,6 +232,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@babel/core", "npm:7.16.0"],
             ["@babel/preset-env", "virtual:7b02ef8ea9577cf4281cf33f97267ed0c6d31f84aa5e2f70e28dd7cc5487b2ab8f611b0e30e5a2fb26a99a7f0091919930ad0b677b064e116cc4fea5a9aa3761#npm:7.16.4"],
+            ["@micro-frame/plugin-preact", "workspace:micro-frame/plugins/preact"],
             ["@micro-frame/plugin-react", "workspace:micro-frame/plugins/react"],
             ["@types/node", "npm:16.11.4"],
             ["@xxxs-shop/application", "workspace:packages/application"],
@@ -4153,7 +4164,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@micro-frame/cli", "workspace:micro-frame/cli"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
             ["@types/cross-spawn", "npm:6.0.2"],
             ["@types/fs-extra", "npm:9.0.13"],
@@ -4169,7 +4180,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["semver", "npm:7.3.5"],
             ["ts-node", "virtual:7b02ef8ea9577cf4281cf33f97267ed0c6d31f84aa5e2f70e28dd7cc5487b2ab8f611b0e30e5a2fb26a99a7f0091919930ad0b677b064e116cc4fea5a9aa3761#npm:10.4.0"],
             ["typescript", "patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"],
-            ["webpack", "virtual:6c60ceb2e779b30d6ce938cd8735421c9facc52a6b3b839378060e155bdaf08fde5e022f3db9af0f1858196dc4a8d1dd05581af418f122783f555e2a4c25c4c2#npm:5.65.0"]
+            ["webpack", "virtual:3745874e210abb0768b08fae92d18e33e8f89c2fd7f7fb8d03618ac1d90b6d8af35887b3bf8f10c14cede2aefc64ec01da004149c2e33f5e7695fa57a8b07465#npm:5.65.0"]
           ],
           "linkType": "SOFT",
         }]
@@ -4190,11 +4201,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "SOFT",
         }]
       ]],
-      ["@micro-frame/env-cl", [
+      ["@micro-frame/env-build", [
         ["workspace:micro-frame/env-cl", {
           "packageLocation": "./micro-frame/env-cl/",
           "packageDependencies": [
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@babel/generator", "npm:7.16.0"],
             ["@babel/parser", "npm:7.16.4"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
@@ -4203,6 +4214,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@micro-frame/plugin-fetch", "workspace:micro-frame/plugins/fetch"],
             ["@micro-frame/plugin-file", "workspace:micro-frame/plugins/file"],
             ["@micro-frame/plugin-fragment", "workspace:micro-frame/plugins/fragment"],
+            ["@micro-frame/plugin-preact", "workspace:micro-frame/plugins/preact"],
             ["@micro-frame/plugin-react", "workspace:micro-frame/plugins/react"],
             ["@micro-frame/plugin-router", "workspace:micro-frame/plugins/router"],
             ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
@@ -4213,12 +4225,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/semver", "npm:7.3.9"],
             ["@types/webpack", "npm:5.28.0"],
             ["@xxxs-shop/dev-configs", "workspace:packages/dev-configs"],
-            ["copy-webpack-plugin", "virtual:6c60ceb2e779b30d6ce938cd8735421c9facc52a6b3b839378060e155bdaf08fde5e022f3db9af0f1858196dc4a8d1dd05581af418f122783f555e2a4c25c4c2#npm:9.1.0"],
+            ["copy-webpack-plugin", "virtual:3745874e210abb0768b08fae92d18e33e8f89c2fd7f7fb8d03618ac1d90b6d8af35887b3bf8f10c14cede2aefc64ec01da004149c2e33f5e7695fa57a8b07465#npm:9.1.0"],
             ["memfs", "npm:3.4.0"],
             ["mkdirp", "npm:1.0.4"],
             ["semver", "npm:7.3.5"],
             ["unionfs", "npm:3.0.2"],
-            ["webpack", "virtual:6c60ceb2e779b30d6ce938cd8735421c9facc52a6b3b839378060e155bdaf08fde5e022f3db9af0f1858196dc4a8d1dd05581af418f122783f555e2a4c25c4c2#npm:5.65.0"],
+            ["webpack", "virtual:3745874e210abb0768b08fae92d18e33e8f89c2fd7f7fb8d03618ac1d90b6d8af35887b3bf8f10c14cede2aefc64ec01da004149c2e33f5e7695fa57a8b07465#npm:5.65.0"],
             ["webpack-bundle-analyzer", "npm:4.5.0"],
             ["webpack-stats-plugin", "npm:1.0.3"]
           ],
@@ -4260,7 +4272,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@micro-frame/plugin-chunk", "workspace:micro-frame/plugins/chunk"],
             ["@micro-frame/browser", "workspace:micro-frame/env-browser"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@micro-frame/node", "workspace:micro-frame/env-node"],
             ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
             ["@types/node", "npm:17.0.0"]
@@ -4275,7 +4287,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@micro-frame/plugin-container", "workspace:micro-frame/plugins/container"],
             ["@micro-frame/browser", "workspace:micro-frame/env-browser"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@micro-frame/node", "workspace:micro-frame/env-node"],
             ["@micro-frame/utils-create-element", "workspace:micro-frame/utils/create-element"],
             ["@micro-frame/utils-create-wrapper", "workspace:micro-frame/utils/create-wrapper"],
@@ -4322,13 +4334,33 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@micro-frame/plugin-fragment", "workspace:micro-frame/plugins/fragment"],
             ["@micro-frame/browser", "workspace:micro-frame/env-browser"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@micro-frame/node", "workspace:micro-frame/env-node"],
             ["@micro-frame/utils-create-element", "workspace:micro-frame/utils/create-element"],
             ["@micro-frame/utils-create-wrapper", "workspace:micro-frame/utils/create-wrapper"],
             ["@types/semver", "npm:7.3.9"],
             ["@xxxs-shop/dev-configs", "workspace:packages/dev-configs"],
             ["semver", "npm:7.3.5"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@micro-frame/plugin-preact", [
+        ["workspace:micro-frame/plugins/preact", {
+          "packageLocation": "./micro-frame/plugins/preact/",
+          "packageDependencies": [
+            ["@micro-frame/plugin-preact", "workspace:micro-frame/plugins/preact"],
+            ["@micro-frame/browser", "workspace:micro-frame/env-browser"],
+            ["@micro-frame/core", "workspace:micro-frame/env-core"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/node", "workspace:micro-frame/env-node"],
+            ["@micro-frame/utils-create-element", "workspace:micro-frame/utils/create-element"],
+            ["@micro-frame/utils-create-wrapper", "workspace:micro-frame/utils/create-wrapper"],
+            ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
+            ["@types/react", "npm:17.0.38"],
+            ["@xxxs-shop/dev-configs", "workspace:packages/dev-configs"],
+            ["preact", "npm:10.6.4"],
+            ["preact-render-to-string", "virtual:3ad1ef7bbf66b5f7a0992bde2bda262f94c9f96c5bf41455603c0493a9c15f57b6d575009deeb297e3a73232e5481f3866b17d01459d15cc545b3b5c24567d8b#npm:5.1.19"]
           ],
           "linkType": "SOFT",
         }]
@@ -4340,7 +4372,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@micro-frame/plugin-react", "workspace:micro-frame/plugins/react"],
             ["@micro-frame/browser", "workspace:micro-frame/env-browser"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@micro-frame/node", "workspace:micro-frame/env-node"],
             ["@micro-frame/utils-create-element", "workspace:micro-frame/utils/create-element"],
             ["@micro-frame/utils-create-wrapper", "workspace:micro-frame/utils/create-wrapper"],
@@ -4361,7 +4393,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@micro-frame/plugin-router", "workspace:micro-frame/plugins/router"],
             ["@micro-frame/browser", "workspace:micro-frame/env-browser"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@micro-frame/node", "workspace:micro-frame/env-node"],
             ["@micro-frame/utils-create-element", "workspace:micro-frame/utils/create-element"],
             ["@types/node", "npm:16.11.4"],
@@ -4420,7 +4452,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/preset-typescript", "virtual:7fb57b4bdb83289629482df27a7d4a147cfe799278255986ca62cc835cb1a9427e87b3b4fc45677da8620673b35c962812b6befc61631f0c242de9a8241b0e37#npm:7.16.0"],
             ["@babel/template", "npm:7.16.0"],
             ["@babel/types", "npm:7.16.0"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@types/copy-webpack-plugin", "npm:8.0.1"],
             ["@types/mkdirp", "npm:1.0.2"],
             ["@types/node", "npm:16.11.4"],
@@ -4815,6 +4847,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-react-npm-17.0.31-cceb1ec826-c2ea547b3e.zip/node_modules/@types/react/",
           "packageDependencies": [
             ["@types/react", "npm:17.0.31"],
+            ["@types/prop-types", "npm:15.7.4"],
+            ["@types/scheduler", "npm:0.16.2"],
+            ["csstype", "npm:3.0.9"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:17.0.38", {
+          "packageLocation": "./.yarn/cache/@types-react-npm-17.0.38-e8f2055f5b-4079f4f959.zip/node_modules/@types/react/",
+          "packageDependencies": [
+            ["@types/react", "npm:17.0.38"],
             ["@types/prop-types", "npm:15.7.4"],
             ["@types/scheduler", "npm:0.16.2"],
             ["csstype", "npm:3.0.9"]
@@ -5435,7 +5477,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@xxxs-shop/application", "workspace:packages/application"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
             ["@types/react", "npm:17.0.31"],
             ["@xxxs-shop/checkout", "workspace:packages/application/containers/checkout"],
@@ -5446,6 +5488,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@xxxs-shop/webshop", "workspace:packages/application/containers/webshop"],
             ["classnames", "npm:2.3.1"],
             ["webpack-stats-plugin", "npm:1.0.3"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@xxxs-shop/backend", [
+        ["workspace:packages/backend", {
+          "packageLocation": "./packages/backend/",
+          "packageDependencies": [
+            ["@xxxs-shop/backend", "workspace:packages/backend"]
           ],
           "linkType": "SOFT",
         }]
@@ -5473,7 +5524,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@xxxs-shop/checkout", "workspace:packages/application/containers/checkout"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@micro-frame/plugin-react", "workspace:micro-frame/plugins/react"],
             ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
             ["@types/react", "npm:17.0.31"],
@@ -5514,10 +5565,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@xxxs-shop/home", "workspace:packages/application/containers/webshop/containers/home"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@micro-frame/plugin-react", "workspace:micro-frame/plugins/react"],
-            ["@types/react", "npm:17.0.31"],
-            ["@xxxs-shop/dev-configs", "workspace:packages/dev-configs"],
-            ["react", "npm:17.0.2"]
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/plugin-preact", "workspace:micro-frame/plugins/preact"],
+            ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
+            ["preact", "npm:10.6.4"]
           ],
           "linkType": "SOFT",
         }]
@@ -5606,6 +5657,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@xxxs-shop/root", "workspace:."],
             ["@babel/core", "npm:7.16.0"],
             ["@babel/preset-env", "virtual:7b02ef8ea9577cf4281cf33f97267ed0c6d31f84aa5e2f70e28dd7cc5487b2ab8f611b0e30e5a2fb26a99a7f0091919930ad0b677b064e116cc4fea5a9aa3761#npm:7.16.4"],
+            ["@micro-frame/plugin-preact", "workspace:micro-frame/plugins/preact"],
             ["@micro-frame/plugin-react", "workspace:micro-frame/plugins/react"],
             ["@types/node", "npm:16.11.4"],
             ["@xxxs-shop/application", "workspace:packages/application"],
@@ -5624,7 +5676,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/application/containers/webshop/containers/search/",
           "packageDependencies": [
             ["@xxxs-shop/search", "workspace:packages/application/containers/webshop/containers/search"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
             ["@types/react", "npm:17.0.31"],
             ["@xxxs-shop/dev-configs", "workspace:packages/dev-configs"],
@@ -5710,13 +5762,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@xxxs-shop/webshop", "workspace:packages/application/containers/webshop"],
             ["@micro-frame/core", "workspace:micro-frame/env-core"],
-            ["@micro-frame/env-cl", "workspace:micro-frame/env-cl"],
+            ["@micro-frame/env-build", "workspace:micro-frame/env-cl"],
             ["@micro-frame/plugin-react", "workspace:micro-frame/plugins/react"],
             ["@micro-frame/webpack", "workspace:micro-frame/webpack"],
             ["@types/react", "npm:17.0.31"],
             ["@types/webpack", "npm:5.28.0"],
             ["@types/webpack-env", "npm:1.16.3"],
             ["@xxxs-shop/dev-configs", "workspace:packages/dev-configs"],
+            ["@xxxs-shop/home", "workspace:packages/application/containers/webshop/containers/home"],
             ["@xxxs-shop/react-hooks-icon", "workspace:packages/react-hooks/icon"],
             ["@xxxs-shop/search", "workspace:packages/application/containers/webshop/containers/search"],
             ["@xxxs-shop/services-logger", "workspace:packages/services/logger"],
@@ -7049,10 +7102,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:6c60ceb2e779b30d6ce938cd8735421c9facc52a6b3b839378060e155bdaf08fde5e022f3db9af0f1858196dc4a8d1dd05581af418f122783f555e2a4c25c4c2#npm:9.1.0", {
-          "packageLocation": "./.yarn/__virtual__/copy-webpack-plugin-virtual-aab4273fcc/0/cache/copy-webpack-plugin-npm-9.1.0-ea49123db5-06cb4fb6fc.zip/node_modules/copy-webpack-plugin/",
+        ["virtual:3745874e210abb0768b08fae92d18e33e8f89c2fd7f7fb8d03618ac1d90b6d8af35887b3bf8f10c14cede2aefc64ec01da004149c2e33f5e7695fa57a8b07465#npm:9.1.0", {
+          "packageLocation": "./.yarn/__virtual__/copy-webpack-plugin-virtual-bd5952d580/0/cache/copy-webpack-plugin-npm-9.1.0-ea49123db5-06cb4fb6fc.zip/node_modules/copy-webpack-plugin/",
           "packageDependencies": [
-            ["copy-webpack-plugin", "virtual:6c60ceb2e779b30d6ce938cd8735421c9facc52a6b3b839378060e155bdaf08fde5e022f3db9af0f1858196dc4a8d1dd05581af418f122783f555e2a4c25c4c2#npm:9.1.0"],
+            ["copy-webpack-plugin", "virtual:3745874e210abb0768b08fae92d18e33e8f89c2fd7f7fb8d03618ac1d90b6d8af35887b3bf8f10c14cede2aefc64ec01da004149c2e33f5e7695fa57a8b07465#npm:9.1.0"],
             ["@types/webpack", "npm:5.28.0"],
             ["fast-glob", "npm:3.2.7"],
             ["glob-parent", "npm:6.0.2"],
@@ -7060,7 +7113,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["normalize-path", "npm:3.0.0"],
             ["schema-utils", "npm:3.1.1"],
             ["serialize-javascript", "npm:6.0.0"],
-            ["webpack", "virtual:6c60ceb2e779b30d6ce938cd8735421c9facc52a6b3b839378060e155bdaf08fde5e022f3db9af0f1858196dc4a8d1dd05581af418f122783f555e2a4c25c4c2#npm:5.65.0"]
+            ["webpack", "virtual:3745874e210abb0768b08fae92d18e33e8f89c2fd7f7fb8d03618ac1d90b6d8af35887b3bf8f10c14cede2aefc64ec01da004149c2e33f5e7695fa57a8b07465#npm:5.65.0"]
           ],
           "packagePeers": [
             "@types/webpack",
@@ -11379,6 +11432,38 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["preact", [
+        ["npm:10.6.4", {
+          "packageLocation": "./.yarn/cache/preact-npm-10.6.4-71f87668fe-09c496bb3c.zip/node_modules/preact/",
+          "packageDependencies": [
+            ["preact", "npm:10.6.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["preact-render-to-string", [
+        ["npm:5.1.19", {
+          "packageLocation": "./.yarn/cache/preact-render-to-string-npm-5.1.19-12c6fd3420-b8b454d7b4.zip/node_modules/preact-render-to-string/",
+          "packageDependencies": [
+            ["preact-render-to-string", "npm:5.1.19"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:3ad1ef7bbf66b5f7a0992bde2bda262f94c9f96c5bf41455603c0493a9c15f57b6d575009deeb297e3a73232e5481f3866b17d01459d15cc545b3b5c24567d8b#npm:5.1.19", {
+          "packageLocation": "./.yarn/__virtual__/preact-render-to-string-virtual-e386c7fd53/0/cache/preact-render-to-string-npm-5.1.19-12c6fd3420-b8b454d7b4.zip/node_modules/preact-render-to-string/",
+          "packageDependencies": [
+            ["preact-render-to-string", "virtual:3ad1ef7bbf66b5f7a0992bde2bda262f94c9f96c5bf41455603c0493a9c15f57b6d575009deeb297e3a73232e5481f3866b17d01459d15cc545b3b5c24567d8b#npm:5.1.19"],
+            ["@types/preact", null],
+            ["preact", "npm:10.6.4"],
+            ["pretty-format", "npm:3.8.0"]
+          ],
+          "packagePeers": [
+            "@types/preact",
+            "preact"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["prelude-ls", [
         ["npm:1.1.2", {
           "packageLocation": "./.yarn/cache/prelude-ls-npm-1.1.2-a0daac0886-c4867c8748.zip/node_modules/prelude-ls/",
@@ -11462,6 +11547,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["pretty-format", "npm:23.6.0"],
             ["ansi-regex", "npm:3.0.0"],
             ["ansi-styles", "npm:3.2.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:3.8.0", {
+          "packageLocation": "./.yarn/cache/pretty-format-npm-3.8.0-293db331d9-21a114d43e.zip/node_modules/pretty-format/",
+          "packageDependencies": [
+            ["pretty-format", "npm:3.8.0"]
           ],
           "linkType": "HARD",
         }]
@@ -12822,37 +12914,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:25b0b6898440ab085823bab7e6d3d47f0b83361d6c51e5292732ae494d082101b778cb27d8cf99c24f9fec2c8b443bb7a8374036b4b7114d0ef7c50979ec3b6d#npm:5.2.4", {
-          "packageLocation": "./.yarn/__virtual__/terser-webpack-plugin-virtual-16619309a1/0/cache/terser-webpack-plugin-npm-5.2.4-cc8bd7c055-ddbcdd28f9.zip/node_modules/terser-webpack-plugin/",
-          "packageDependencies": [
-            ["terser-webpack-plugin", "virtual:25b0b6898440ab085823bab7e6d3d47f0b83361d6c51e5292732ae494d082101b778cb27d8cf99c24f9fec2c8b443bb7a8374036b4b7114d0ef7c50979ec3b6d#npm:5.2.4"],
-            ["@swc/core", null],
-            ["@types/esbuild", null],
-            ["@types/swc__core", null],
-            ["@types/uglify-js", null],
-            ["@types/webpack", null],
-            ["esbuild", null],
-            ["jest-worker", "npm:27.3.1"],
-            ["p-limit", "npm:3.1.0"],
-            ["schema-utils", "npm:3.1.1"],
-            ["serialize-javascript", "npm:6.0.0"],
-            ["source-map", "npm:0.6.1"],
-            ["terser", "npm:5.9.0"],
-            ["uglify-js", null],
-            ["webpack", "virtual:6c60ceb2e779b30d6ce938cd8735421c9facc52a6b3b839378060e155bdaf08fde5e022f3db9af0f1858196dc4a8d1dd05581af418f122783f555e2a4c25c4c2#npm:5.65.0"]
-          ],
-          "packagePeers": [
-            "@swc/core",
-            "@types/esbuild",
-            "@types/swc__core",
-            "@types/uglify-js",
-            "@types/webpack",
-            "esbuild",
-            "uglify-js",
-            "webpack"
-          ],
-          "linkType": "HARD",
-        }],
         ["virtual:95912bd05c6dfa951cdb2214a0624bbfc09042a8f18d87ecc644a2a2ccbe40fc995e16203bedc9cc38354f5b96846e38c3ce6e04128e86e990d09336d213b2e2#npm:5.2.4", {
           "packageLocation": "./.yarn/__virtual__/terser-webpack-plugin-virtual-a6f33d4f36/0/cache/terser-webpack-plugin-npm-5.2.4-cc8bd7c055-ddbcdd28f9.zip/node_modules/terser-webpack-plugin/",
           "packageDependencies": [
@@ -12871,6 +12932,37 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["terser", "npm:5.9.0"],
             ["uglify-js", null],
             ["webpack", "virtual:65938d0c2920ae9eefb828c778557214f54bd297859cccbba0d76265b64248754429ade3dcb1089047ec223afd5e08a613767d432fa0ea70c071168dff0ba7ce#npm:5.64.1"]
+          ],
+          "packagePeers": [
+            "@swc/core",
+            "@types/esbuild",
+            "@types/swc__core",
+            "@types/uglify-js",
+            "@types/webpack",
+            "esbuild",
+            "uglify-js",
+            "webpack"
+          ],
+          "linkType": "HARD",
+        }],
+        ["virtual:bbef25994c6b1c28f4e1d515af997e70ddee574797661cafced7b5a76329f98a87196ad22ec517ef2e7101c029fe361cde3c641a5a6707e3582727d163b01158#npm:5.2.4", {
+          "packageLocation": "./.yarn/__virtual__/terser-webpack-plugin-virtual-75b6435c1e/0/cache/terser-webpack-plugin-npm-5.2.4-cc8bd7c055-ddbcdd28f9.zip/node_modules/terser-webpack-plugin/",
+          "packageDependencies": [
+            ["terser-webpack-plugin", "virtual:bbef25994c6b1c28f4e1d515af997e70ddee574797661cafced7b5a76329f98a87196ad22ec517ef2e7101c029fe361cde3c641a5a6707e3582727d163b01158#npm:5.2.4"],
+            ["@swc/core", null],
+            ["@types/esbuild", null],
+            ["@types/swc__core", null],
+            ["@types/uglify-js", null],
+            ["@types/webpack", null],
+            ["esbuild", null],
+            ["jest-worker", "npm:27.3.1"],
+            ["p-limit", "npm:3.1.0"],
+            ["schema-utils", "npm:3.1.1"],
+            ["serialize-javascript", "npm:6.0.0"],
+            ["source-map", "npm:0.6.1"],
+            ["terser", "npm:5.9.0"],
+            ["uglify-js", null],
+            ["webpack", "virtual:3745874e210abb0768b08fae92d18e33e8f89c2fd7f7fb8d03618ac1d90b6d8af35887b3bf8f10c14cede2aefc64ec01da004149c2e33f5e7695fa57a8b07465#npm:5.65.0"]
           ],
           "packagePeers": [
             "@swc/core",
@@ -13588,6 +13680,43 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
+        ["virtual:3745874e210abb0768b08fae92d18e33e8f89c2fd7f7fb8d03618ac1d90b6d8af35887b3bf8f10c14cede2aefc64ec01da004149c2e33f5e7695fa57a8b07465#npm:5.65.0", {
+          "packageLocation": "./.yarn/__virtual__/webpack-virtual-bbef25994c/0/cache/webpack-npm-5.65.0-da658c1b49-221ab8ccd4.zip/node_modules/webpack/",
+          "packageDependencies": [
+            ["webpack", "virtual:3745874e210abb0768b08fae92d18e33e8f89c2fd7f7fb8d03618ac1d90b6d8af35887b3bf8f10c14cede2aefc64ec01da004149c2e33f5e7695fa57a8b07465#npm:5.65.0"],
+            ["@types/eslint-scope", "npm:3.7.1"],
+            ["@types/estree", "npm:0.0.50"],
+            ["@types/webpack-cli", null],
+            ["@webassemblyjs/ast", "npm:1.11.1"],
+            ["@webassemblyjs/wasm-edit", "npm:1.11.1"],
+            ["@webassemblyjs/wasm-parser", "npm:1.11.1"],
+            ["acorn", "npm:8.5.0"],
+            ["acorn-import-assertions", "virtual:95912bd05c6dfa951cdb2214a0624bbfc09042a8f18d87ecc644a2a2ccbe40fc995e16203bedc9cc38354f5b96846e38c3ce6e04128e86e990d09336d213b2e2#npm:1.8.0"],
+            ["browserslist", "npm:4.17.4"],
+            ["chrome-trace-event", "npm:1.0.3"],
+            ["enhanced-resolve", "npm:5.8.3"],
+            ["es-module-lexer", "npm:0.9.3"],
+            ["eslint-scope", "npm:5.1.1"],
+            ["events", "npm:3.3.0"],
+            ["glob-to-regexp", "npm:0.4.1"],
+            ["graceful-fs", "npm:4.2.8"],
+            ["json-parse-better-errors", "npm:1.0.2"],
+            ["loader-runner", "npm:4.2.0"],
+            ["mime-types", "npm:2.1.33"],
+            ["neo-async", "npm:2.6.2"],
+            ["schema-utils", "npm:3.1.1"],
+            ["tapable", "npm:2.2.1"],
+            ["terser-webpack-plugin", "virtual:bbef25994c6b1c28f4e1d515af997e70ddee574797661cafced7b5a76329f98a87196ad22ec517ef2e7101c029fe361cde3c641a5a6707e3582727d163b01158#npm:5.2.4"],
+            ["watchpack", "npm:2.3.1"],
+            ["webpack-cli", null],
+            ["webpack-sources", "npm:3.2.2"]
+          ],
+          "packagePeers": [
+            "@types/webpack-cli",
+            "webpack-cli"
+          ],
+          "linkType": "HARD",
+        }],
         ["virtual:65938d0c2920ae9eefb828c778557214f54bd297859cccbba0d76265b64248754429ade3dcb1089047ec223afd5e08a613767d432fa0ea70c071168dff0ba7ce#npm:5.64.1", {
           "packageLocation": "./.yarn/__virtual__/webpack-virtual-95912bd05c/0/cache/webpack-npm-5.64.1-77fbd9ac18-d2a1baddae.zip/node_modules/webpack/",
           "packageDependencies": [
@@ -13616,43 +13745,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tapable", "npm:2.2.1"],
             ["terser-webpack-plugin", "virtual:95912bd05c6dfa951cdb2214a0624bbfc09042a8f18d87ecc644a2a2ccbe40fc995e16203bedc9cc38354f5b96846e38c3ce6e04128e86e990d09336d213b2e2#npm:5.2.4"],
             ["watchpack", "npm:2.2.0"],
-            ["webpack-cli", null],
-            ["webpack-sources", "npm:3.2.2"]
-          ],
-          "packagePeers": [
-            "@types/webpack-cli",
-            "webpack-cli"
-          ],
-          "linkType": "HARD",
-        }],
-        ["virtual:6c60ceb2e779b30d6ce938cd8735421c9facc52a6b3b839378060e155bdaf08fde5e022f3db9af0f1858196dc4a8d1dd05581af418f122783f555e2a4c25c4c2#npm:5.65.0", {
-          "packageLocation": "./.yarn/__virtual__/webpack-virtual-25b0b68984/0/cache/webpack-npm-5.65.0-da658c1b49-221ab8ccd4.zip/node_modules/webpack/",
-          "packageDependencies": [
-            ["webpack", "virtual:6c60ceb2e779b30d6ce938cd8735421c9facc52a6b3b839378060e155bdaf08fde5e022f3db9af0f1858196dc4a8d1dd05581af418f122783f555e2a4c25c4c2#npm:5.65.0"],
-            ["@types/eslint-scope", "npm:3.7.1"],
-            ["@types/estree", "npm:0.0.50"],
-            ["@types/webpack-cli", null],
-            ["@webassemblyjs/ast", "npm:1.11.1"],
-            ["@webassemblyjs/wasm-edit", "npm:1.11.1"],
-            ["@webassemblyjs/wasm-parser", "npm:1.11.1"],
-            ["acorn", "npm:8.5.0"],
-            ["acorn-import-assertions", "virtual:95912bd05c6dfa951cdb2214a0624bbfc09042a8f18d87ecc644a2a2ccbe40fc995e16203bedc9cc38354f5b96846e38c3ce6e04128e86e990d09336d213b2e2#npm:1.8.0"],
-            ["browserslist", "npm:4.17.4"],
-            ["chrome-trace-event", "npm:1.0.3"],
-            ["enhanced-resolve", "npm:5.8.3"],
-            ["es-module-lexer", "npm:0.9.3"],
-            ["eslint-scope", "npm:5.1.1"],
-            ["events", "npm:3.3.0"],
-            ["glob-to-regexp", "npm:0.4.1"],
-            ["graceful-fs", "npm:4.2.8"],
-            ["json-parse-better-errors", "npm:1.0.2"],
-            ["loader-runner", "npm:4.2.0"],
-            ["mime-types", "npm:2.1.33"],
-            ["neo-async", "npm:2.6.2"],
-            ["schema-utils", "npm:3.1.1"],
-            ["tapable", "npm:2.2.1"],
-            ["terser-webpack-plugin", "virtual:25b0b6898440ab085823bab7e6d3d47f0b83361d6c51e5292732ae494d082101b778cb27d8cf99c24f9fec2c8b443bb7a8374036b4b7114d0ef7c50979ec3b6d#npm:5.2.4"],
-            ["watchpack", "npm:2.3.1"],
             ["webpack-cli", null],
             ["webpack-sources", "npm:3.2.2"]
           ],

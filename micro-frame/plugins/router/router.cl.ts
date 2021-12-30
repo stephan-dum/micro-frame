@@ -1,8 +1,8 @@
-import { CLIRenderContext, NeededExternals, NodeTypesCL } from "@micro-frame/env-cl/types";
+import { CLIRenderContext, NeededExternals, NodeTypesCL } from "@micro-frame/env-build/types";
 import {IRouteProps, RouterNode} from "./types";
 
-import getUnionNode from "@micro-frame/env-cl/nodes/getUnionNode";
-import createNode from "@micro-frame/env-cl/utils/createNode";
+import getUnionNode from "@micro-frame/env-build/nodes/getUnionNode";
+import createNode from "@micro-frame/env-build/utils/createNode";
 import {MicroNode} from "@micro-frame/core/types";
 
 export type RouterFactory = NodeTypesCL<RouterNode>;

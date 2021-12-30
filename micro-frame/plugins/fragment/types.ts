@@ -1,5 +1,5 @@
 import { TemplateNode } from "@micro-frame/utils-create-element/types";
-import {RawExternalModule, ExternalRecords, NodeTypesCL} from "@micro-frame/env-cl/types";
+import {RawExternalModule, ExternalRecords, NodeTypesCL} from "@micro-frame/env-build/types";
 
 interface MicroNode extends FragmentNode {}
 

@@ -26,6 +26,7 @@ const normalizeExternal = (rawExternal: RawExternalModule) => {
     return {
       type: 'module',
       name: rawExternal,
+      paths: ['./'],
       exports: defaultExports,
     };
   }
@@ -36,6 +37,7 @@ const normalizeExternal = (rawExternal: RawExternalModule) => {
       type: 'module',
       name,
       imports,
+      paths: ['./'],
       exports: defaultExports
     };
   }

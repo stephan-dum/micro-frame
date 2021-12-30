@@ -1,6 +1,6 @@
 import path from "path";
-import createNode from "@micro-frame/env-cl/utils/createNode";
-import getContainerNode from "@micro-frame/env-cl/nodes/getContainerNode";
+import createNode from "@micro-frame/env-build/utils/createNode";
+import getContainerNode from "@micro-frame/env-build/nodes/getContainerNode";
 import { ContainerFactory } from "./types";
 import {
   CLIRenderContext, InjectObject,
@@ -8,10 +8,10 @@ import {
   NormalizedProvide, RawInject,
   RawProvide,
   StatsFile
-} from "@micro-frame/env-cl/types";
-import createExternals from "@micro-frame/env-cl/utils/createExternals";
+} from "@micro-frame/env-build/types";
+import createExternals from "@micro-frame/env-build/utils/createExternals";
 
-import mergeExternals from "@micro-frame/env-cl/utils/mergeExternals";
+import mergeExternals from "@micro-frame/env-build/utils/mergeExternals";
 
 const normalizeProvides = (rawProvide: RawProvide): NormalizedProvide => {
   const provide: NormalizedProvide = {};

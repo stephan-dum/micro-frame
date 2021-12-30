@@ -60,6 +60,7 @@ const federation = async (env: ConfigEnvironment, options: ConfigOptions, { cwd,
     name: root,
   };
 
+  // TODO: this is less then ideal and can be remove if there can be no more imports within the files
   global.importExternal = mockedImport;
   const structure = await createNode(node, initialContext) as CLINodeContainer;
   delete global.importExternal;

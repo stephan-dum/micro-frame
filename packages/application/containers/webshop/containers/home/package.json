@@ -3,12 +3,12 @@
   "name": "@xxxs-shop/home",
   "packageManager": "yarn@3.0.2",
   "dependencies": {
-    "@micro-frame/plugin-react": "1.0.0",
-    "react": "^17.0.2"
+    "@micro-frame/plugin-preact": "1.0.0",
+    "preact": "^10.6.4"
   },
   "devDependencies": {
     "@micro-frame/core": "1.0.0",
-    "@types/react": "^17.0.30",
-    "@xxxs-shop/dev-configs": "1.0.0"
+    "@micro-frame/env-build": "1.0.0",
+    "@micro-frame/webpack": "1.0.0"
   }
 }

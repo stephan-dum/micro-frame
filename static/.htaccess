@@ -31,10 +31,12 @@ RewriteRule (.*)  https://%{HTTP_HOST}/$1 [R=301,L]
 RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
-#RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteRule (.*)/?$ http://localhost:61005/$1 [P]
 
-RewriteRule (/ProductDetail)/?$ http://localhost:8112/$1 [P]
-RewriteRule (/checkout)/?$ http://localhost:8111/$1 [P]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+#if we want to just scale certain routes
+#RewriteRule (/ProductDetail)/?$ http://localhost:8112/$1 [P]
+#RewriteRule (/checkout)/?$ http://localhost:8111/$1 [P]
+
 RewriteRule (.*)/?$ http://localhost:8110/$1 [P]

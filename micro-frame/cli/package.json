@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@micro-frame/core": "1.0.0",
-    "@micro-frame/env-cl": "1.0.0",
+    "@micro-frame/env-build": "1.0.0",
     "@micro-frame/webpack": "1.0.0",
     "commander": "^8.2.0",
     "cross-env": "^7.0.3",

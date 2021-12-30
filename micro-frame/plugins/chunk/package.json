@@ -6,7 +6,7 @@
   "browser": "chunk.browser.ts",
   "dependencies": {
     "@micro-frame/core": "1.0.0",
-    "@micro-frame/env-cl": "1.0.0"
+    "@micro-frame/env-build": "1.0.0"
   },
   "devDependencies": {
     "@micro-frame/browser": "1.0.0",

@@ -1,4 +1,4 @@
-import { ExternalRecords, NodeTypesCL } from "@micro-frame/env-cl/types";
+import { ExternalRecords, NodeTypesCL } from "@micro-frame/env-build/types";
 
 export interface ContainerNode {
   type: 'container';

@@ -4,6 +4,7 @@ import {MicroNode} from "@micro-frame/core/types";
 import container from "@micro-frame/plugin-container/container.cl";
 import fragment from "@micro-frame/plugin-fragment/fragment.cl";
 import react from "@micro-frame/plugin-react/react.cl";
+import preact from "@micro-frame/plugin-preact/preact.cl";
 import router from "@micro-frame/plugin-router/router.cl";
 import chunk from "@micro-frame/plugin-chunk/chunk.cl";
 import createExternals from "./createExternals";
@@ -15,6 +16,7 @@ const types: Record<string, MicroNodeFactory> = {
   react,
   container,
   chunk,
+  preact,
 }
 
 async function createNode(options: MicroNode, context: CLIRenderContext): Promise<CLINodeResult> {
@@ -23,7 +25,9 @@ async function createNode(options: MicroNode, context: CLIRenderContext): Promis
 
   const allParentExternals = mergeExternals({}, context.allParentExternals);
   const parentExternals = {};
-  const resolveOptions = types[type].dirname ? { paths: [types[type].dirname]} : { paths: [context.cwd] };
+
+  const nodeFactory = types[type];
+  const resolveOptions = nodeFactory.dirname ? { paths: [types[type].dirname]} : { paths: [context.cwd] };
   const pluginExternals = createExternals(types[type].externals || [], resolveOptions, context.containerName, allParentExternals, parentExternals);
 
   const node = await types[type](options, {

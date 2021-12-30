@@ -10,6 +10,11 @@ const config = {
       node_module: '@micro-frame/plugin-react',
       lazy: true,
       type: 'react',
+    },
+    {
+      node_module: '@micro-frame/plugin-preact',
+      lazy: true,
+      type: 'preact',
     }
   ],
 };

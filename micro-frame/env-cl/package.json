@@ -1,5 +1,5 @@
 {
-  "name": "@micro-frame/env-cl",
+  "name": "@micro-frame/env-build",
   "packageManager": "yarn@3.1.0",
   "version": "1.0.0",
   "dependencies": {
@@ -11,6 +11,7 @@
     "@micro-frame/plugin-fetch": "1.0.0",
     "@micro-frame/plugin-file": "1.0.0",
     "@micro-frame/plugin-fragment": "1.0.0",
+    "@micro-frame/plugin-preact": "1.0.0",
     "@micro-frame/plugin-react": "1.0.0",
     "@micro-frame/plugin-router": "1.0.0",
     "@micro-frame/webpack": "1.0.0",

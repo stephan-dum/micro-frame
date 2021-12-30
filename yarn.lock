@@ -1739,7 +1739,7 @@ __metadata:
   resolution: "@micro-frame/cli@workspace:micro-frame/cli"
   dependencies:
     "@micro-frame/core": 1.0.0
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@micro-frame/webpack": 1.0.0
     "@types/cross-spawn": ^6.0.2
     "@types/fs-extra": ^9.0.13
@@ -1773,9 +1773,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@micro-frame/env-cl@1.0.0, @micro-frame/env-cl@workspace:micro-frame/env-cl":
+"@micro-frame/env-build@1.0.0, @micro-frame/env-build@workspace:micro-frame/env-cl":
   version: 0.0.0-use.local
-  resolution: "@micro-frame/env-cl@workspace:micro-frame/env-cl"
+  resolution: "@micro-frame/env-build@workspace:micro-frame/env-cl"
   dependencies:
     "@babel/generator": ^7.16.0
     "@babel/parser": ^7.16.4
@@ -1785,6 +1785,7 @@ __metadata:
     "@micro-frame/plugin-fetch": 1.0.0
     "@micro-frame/plugin-file": 1.0.0
     "@micro-frame/plugin-fragment": 1.0.0
+    "@micro-frame/plugin-preact": 1.0.0
     "@micro-frame/plugin-react": 1.0.0
     "@micro-frame/plugin-router": 1.0.0
     "@micro-frame/webpack": 1.0.0
@@ -1838,7 +1839,7 @@ __metadata:
   dependencies:
     "@micro-frame/browser": 1.0.0
     "@micro-frame/core": 1.0.0
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@micro-frame/node": 1.0.0
     "@micro-frame/webpack": 1.0.0
     "@types/node": ^17.0.0
@@ -1851,7 +1852,7 @@ __metadata:
   dependencies:
     "@micro-frame/browser": 1.0.0
     "@micro-frame/core": 1.0.0
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@micro-frame/node": 1.0.0
     "@micro-frame/utils-create-element": 1.0.0
     "@micro-frame/utils-create-wrapper": 1.0.0
@@ -1892,7 +1893,7 @@ __metadata:
   dependencies:
     "@micro-frame/browser": 1.0.0
     "@micro-frame/core": 1.0.0
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@micro-frame/node": 1.0.0
     "@micro-frame/utils-create-element": 1.0.0
     "@micro-frame/utils-create-wrapper": 1.0.0
@@ -1902,13 +1903,31 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@micro-frame/plugin-preact@1.0.0, @micro-frame/plugin-preact@workspace:micro-frame/plugins/preact":
+  version: 0.0.0-use.local
+  resolution: "@micro-frame/plugin-preact@workspace:micro-frame/plugins/preact"
+  dependencies:
+    "@micro-frame/browser": 1.0.0
+    "@micro-frame/core": 1.0.0
+    "@micro-frame/env-build": 1.0.0
+    "@micro-frame/node": 1.0.0
+    "@micro-frame/utils-create-element": 1.0.0
+    "@micro-frame/utils-create-wrapper": 1.0.0
+    "@micro-frame/webpack": 1.0.0
+    "@types/react": ^17.0.38
+    "@xxxs-shop/dev-configs": 1.0.0
+    preact: ">=10"
+    preact-render-to-string: ^5.1.19
+  languageName: unknown
+  linkType: soft
+
 "@micro-frame/plugin-react@1.0.0, @micro-frame/plugin-react@workspace:micro-frame/plugins/react":
   version: 0.0.0-use.local
   resolution: "@micro-frame/plugin-react@workspace:micro-frame/plugins/react"
   dependencies:
     "@micro-frame/browser": 1.0.0
     "@micro-frame/core": 1.0.0
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@micro-frame/node": 1.0.0
     "@micro-frame/utils-create-element": 1.0.0
     "@micro-frame/utils-create-wrapper": 1.0.0
@@ -1927,7 +1946,7 @@ __metadata:
   dependencies:
     "@micro-frame/browser": 1.0.0
     "@micro-frame/core": 1.0.0
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@micro-frame/node": 1.0.0
     "@micro-frame/utils-create-element": 1.0.0
     "@types/node": ^16.11.4
@@ -1977,7 +1996,7 @@ __metadata:
     "@babel/preset-typescript": ^7.16.0
     "@babel/template": ^7.16.0
     "@babel/types": ^7.16.0
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@types/copy-webpack-plugin": ^8.0.1
     "@types/mkdirp": ^1.0.2
     "@types/node": ^16.10.3
@@ -2003,9 +2022,6 @@ __metadata:
     webpack-dev-server: ^4.6.0
     webpack-shell-plugin-next: ^2.2.2
     webpack-stats-plugin: ^1.0.3
-  bin:
-    ts-webpack: ./.bin/ts-webpack.js
-    update-package: ./.bin/updatePackageJson.js
   languageName: unknown
   linkType: soft
 
@@ -2333,6 +2349,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: c2ea547b3e3398f53971908ae34bdb1ca1f2d8f1cf57a6f21c37b2bb77c2e625b5349de69b3c573f969056362eddac4bbac075d5d470716feef4161e26692b83
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^17.0.38":
+  version: 17.0.38
+  resolution: "@types/react@npm:17.0.38"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 4079f4f959cd4a4bfaeda8b89fe8a1b1f8bdc9d87acfdc5f74a0b39cec9ec6a470724357c62778c0f063180b360c250e920c5a142f1dbcda67d9cc25a6d43a85
   languageName: node
   linkType: hard
 
@@ -2756,7 +2783,7 @@ __metadata:
   resolution: "@xxxs-shop/application@workspace:packages/application"
   dependencies:
     "@micro-frame/core": 1.0.0
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@micro-frame/webpack": 1.0.0
     "@types/react": ^17.0.27
     "@xxxs-shop/checkout": 1.0.0
@@ -2767,6 +2794,12 @@ __metadata:
     "@xxxs-shop/webshop": 1.0.0
     classnames: ^2.3.1
     webpack-stats-plugin: ^1.0.3
+  languageName: unknown
+  linkType: soft
+
+"@xxxs-shop/backend@workspace:packages/backend":
+  version: 0.0.0-use.local
+  resolution: "@xxxs-shop/backend@workspace:packages/backend"
   languageName: unknown
   linkType: soft
 
@@ -2790,7 +2823,7 @@ __metadata:
   resolution: "@xxxs-shop/checkout@workspace:packages/application/containers/checkout"
   dependencies:
     "@micro-frame/core": 1.0.0
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@micro-frame/plugin-react": 1.0.0
     "@micro-frame/webpack": 1.0.0
     "@types/react": ^17.0.30
@@ -2822,15 +2855,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xxxs-shop/home@workspace:packages/application/containers/webshop/containers/home":
+"@xxxs-shop/home@1.0.0, @xxxs-shop/home@workspace:packages/application/containers/webshop/containers/home":
   version: 0.0.0-use.local
   resolution: "@xxxs-shop/home@workspace:packages/application/containers/webshop/containers/home"
   dependencies:
     "@micro-frame/core": 1.0.0
-    "@micro-frame/plugin-react": 1.0.0
-    "@types/react": ^17.0.30
-    "@xxxs-shop/dev-configs": 1.0.0
-    react: ^17.0.2
+    "@micro-frame/env-build": 1.0.0
+    "@micro-frame/plugin-preact": 1.0.0
+    "@micro-frame/webpack": 1.0.0
+    preact: ^10.6.4
   languageName: unknown
   linkType: soft
 
@@ -2903,6 +2936,7 @@ __metadata:
   dependencies:
     "@babel/core": ^7.16.0
     "@babel/preset-env": ^7.16.4
+    "@micro-frame/plugin-preact": 1.0.0
     "@micro-frame/plugin-react": 1.0.0
     "@types/node": ^16.11.1
     "@xxxs-shop/application": 1.0.0
@@ -2919,7 +2953,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@xxxs-shop/search@workspace:packages/application/containers/webshop/containers/search"
   dependencies:
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@micro-frame/webpack": 1.0.0
     "@types/react": ^17.0.30
     "@xxxs-shop/dev-configs": 1.0.0
@@ -2985,13 +3019,14 @@ __metadata:
   resolution: "@xxxs-shop/webshop@workspace:packages/application/containers/webshop"
   dependencies:
     "@micro-frame/core": 1.0.0
-    "@micro-frame/env-cl": 1.0.0
+    "@micro-frame/env-build": 1.0.0
     "@micro-frame/plugin-react": 1.0.0
     "@micro-frame/webpack": 1.0.0
     "@types/react": ^17.0.30
     "@types/webpack": ^5.28.0
     "@types/webpack-env": ^1.16.3
     "@xxxs-shop/dev-configs": 1.0.0
+    "@xxxs-shop/home": 1.0.0
     "@xxxs-shop/react-hooks-icon": 1.0.0
     "@xxxs-shop/search": 1.0.0
     "@xxxs-shop/services-logger": 1.0.0
@@ -7705,6 +7740,24 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"preact-render-to-string@npm:^5.1.19":
+  version: 5.1.19
+  resolution: "preact-render-to-string@npm:5.1.19"
+  dependencies:
+    pretty-format: ^3.8.0
+  peerDependencies:
+    preact: ">=10"
+  checksum: b8b454d7b4bd93d6dcfc5e1269cfef1756e850c524e80340be62b88582cb88eb926a3edc0088f4dc2a454f56c1e09faa10bced081f25204342fd338275aa5af1
+  languageName: node
+  linkType: hard
+
+"preact@npm:>=10, preact@npm:^10.6.4":
+  version: 10.6.4
+  resolution: "preact@npm:10.6.4"
+  checksum: 09c496bb3cbe231fb6ef218b44d29af53a1f4bf1ae2e5929ef0faf70f9ecffaa475b4459ef72dd8f0f5396c255172c7c26de5c7d2eb6f6849e36e724c7aa86b7
+  languageName: node
+  linkType: hard
+
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -7781,6 +7834,13 @@ fsevents@~2.3.2:
     ansi-regex: ^3.0.0
     ansi-styles: ^3.2.0
   checksum: b668eac9fb19d12cf27098206d587b0be8da9f7fdc56998ace9bad9b6b6f5a5be5004d9fec3c2dc215d4128ef3db901e7329e0e8e081b0732a781bddfa9e2b66
+  languageName: node
+  linkType: hard
+
+"pretty-format@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "pretty-format@npm:3.8.0"
+  checksum: 21a114d43ef06978f8f7f6212be4649b0b094f05d9b30e14e37550bf35c8ca24d8adbca9e5adc4cc15d9eaf7a1e7a30478a4dc37b30982bfdf0292a5b385484c
   languageName: node
   linkType: hard
 

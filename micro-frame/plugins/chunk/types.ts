@@ -1,4 +1,4 @@
-import { RawExternalModule, NodeTypesCL } from "@micro-frame/env-cl/types";
+import { RawExternalModule, NodeTypesCL } from "@micro-frame/env-build/types";
 import { MicroNode } from "../../env-core/types";
 
 export interface ChunkNode {
